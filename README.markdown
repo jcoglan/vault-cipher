@@ -22,6 +22,24 @@ cipher.encrypt('some text', function(error, ciphertext) {
 ```
 
 
+### Settings
+
+The cipher is configurable by passing options to the constructor, for example:
+
+```js
+var cipher = new Cipher('secret key', {format: 'hex', work: 1000})
+```
+
+The available options are:
+
+* `format`: the output format of the ciphertext, either `base64` (default) or
+  `hex`
+* `salt`: a salt string used during PBKDF2 key derivation, defaults to a GUID
+  embedded in the library
+* `work`: the number of PBKDF2 iterations used to derive the encryption and
+  signing keys, default is `1000`
+
+
 ## License
 
 (The MIT License)
