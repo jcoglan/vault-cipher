@@ -1,0 +1,26 @@
+{ "name"            : "vault-cipher"
+, "description"     : "High-level authenticated encryption API used by Vault"
+, "homepage"        : "https://vault.jcoglan.com"
+, "author"          : "James Coglan <jcoglan@gmail.com> (http://jcoglan.com/)"
+, "keywords"        : ["security", "encryption"]
+
+, "version"         : "0.3.0"
+, "engines"         : {"node": ">=0.6.0"}
+, "main"            : "./lib/vault-cipher.js"
+, "devDependencies" : {"jsclass": ""}
+
+, "scripts"         : {"test": "node spec/node.js"}
+
+, "bugs"            : "http://github.com/jcoglan/vault-cipher/issues"
+
+, "licenses"        : [ { "type"  : "MIT"
+                        , "url"   : "http://www.opensource.org/licenses/mit-license.php"
+                        }
+                      ]
+
+, "repositories"    : [ { "type"  : "git"
+                        , "url"   : "git://github.com/jcoglan/vault-cipher.git"
+                        }
+                      ]
+}
+
