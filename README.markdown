@@ -14,7 +14,7 @@ var Cipher = require('vault-cipher'),
 
 cipher.encrypt('some text', function(error, ciphertext) {
   
-  cipher.decrypt(ciphertext', function(error, message) {
+  cipher.decrypt(ciphertext, function(error, message) {
     
     // message == 'some text'
   });
