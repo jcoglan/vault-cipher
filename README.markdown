@@ -3,7 +3,7 @@
 Provides a high-level authenticated encryption API that
 [Vault](http://github.com/jcoglan/vault) uses to encrypt its stored settings. It
 is not intended to be a long-term solution since eventually we will be able to
-use GCM mode and NaCl in Node, but for now I'm using a hand-rolled
+use GCM mode or NaCl in Node, but for now I'm using a hand-rolled
 encrypt-then-MAC scheme based on AES-256 and HMAC-SHA-256.
 
 It is very high-level, providing a simple way to encrypt and decrypt text:
@@ -15,6 +15,7 @@ var Cipher = require('vault-cipher'),
 cipher.encrypt('some text', function(error, ciphertext) {
   
   cipher.decrypt(ciphertext', function(error, message) {
+    
     // message == 'some text'
   });
 });
