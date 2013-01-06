@@ -6,7 +6,7 @@ var Cipher = require('../lib/vault-cipher')
 JS.Test.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher', function() { with(this) {
     before(function() { with(this) {
-      this.cipher = new Cipher('the-key', {uuid: 'ABCD1234', format: format})
+      this.cipher = new Cipher('the-key', {format: format, work: 1})
     }})
     
     describe('encryption', function() { with(this) {
