@@ -13,9 +13,9 @@ var Cipher = require('vault-cipher'),
     cipher = new Cipher('your secret key');
 
 cipher.encrypt('some text', function(error, ciphertext) {
-  
+
   cipher.decrypt(ciphertext, function(error, message) {
-    
+
     // message == 'some text'
   });
 });
