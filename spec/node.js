@@ -45,7 +45,7 @@ JS.Test.describe('vault-cipher', function() { with(this) {
     }})
     
     it('throws an error if the text is altered', function(resume) { with(this) {
-      text = text.replace(/.$/, 'x')
+      text = text.replace(/^./, 'x')
       cipher.decrypt(text, function(error, result) {
         resume(function() {
           assertNotNull( error )
