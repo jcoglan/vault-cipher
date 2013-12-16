@@ -1,7 +1,5 @@
-require('jsclass')
-JS.require('JS.Test')
-
-var Cipher = require('../lib/vault-cipher')
+var JS     = require('jstest'),
+    Cipher = require('../lib/vault-cipher')
 
 JS.Test.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher', function() { with(this) {
