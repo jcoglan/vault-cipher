@@ -1,0 +1,25 @@
+<!doctype>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jstest</title>
+  </head>
+  <body>
+
+    <script src="../lib/crypto-js/aes.js"></script>
+    <script src="../lib/crypto-js/hmac-sha256.js"></script>
+    <script src="../lib/crypto-js/pbkdf2.js"></script>
+    <script src="../lib/buffer.js"></script>
+    <script src="../lib/crypto-shim.js"></script>
+    <script src="../lib/vault-cipher.js"></script>
+
+    <script src="../node_modules/jstest/jstest.js"></script>
+    <script src="./cipher_spec.js"></script>
+
+    <script>
+      JS.Test.autorun()
+    </script>
+
+  </body>
+</html>
+
