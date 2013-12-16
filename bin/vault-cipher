@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+var Cipher  = require('../lib/vault-cipher'),
+    fs      = require('fs'),
+    path    = require('path'),
+    nopt    = require('nopt'),
+
+    options = { key:    String
+              , salt:   String
+              , work:   Number
+              , format: String
+              , input:  path
+              , output: path
+              },
+
+    shorts  = { k: '--key'
+              , s: '--salt'
+              , w: '--work'
+              , f: '--format'
+              , i: '--input'
+              , o: '--output'
+              };
+
+var concat = function(stream, callback) {
+  var chunks = [], size = 0;
+  stream.on('data', function(c) {
+    chunks.push(c);
+    size += c.length;
+  });
+  stream.on('end', function() {
+    var buffer = new Buffer(size), offset = 0;
+    for (var i = 0, n = chunks.length; i < n; i++) {
+      chunks[i].copy(buffer, offset);
+      offset = chunks[i].length;
+    }
+    callback(null, buffer);
+  });
+  stream.on('error', function() {
+    callback(error);
+  });
+};
+
+var die = function(message) {
+  console.error(message);
+  process.exit(1);
+};
+
+var params = nopt(options, shorts),
+    cipher = new Cipher(params.key, {salt: params.salt, work: params.work, format: params.format}),
+    input  = params.input ? fs.createReadStream(params.input) : process.stdin,
+    output = params.output ? fs.createWriteStream(params.output) : process.stdout;
+
+var operation = params.argv.remain[0];
+if (['encrypt', 'decrypt'].indexOf(operation) < 0)
+  die('Operation must be either "encrypt" or "decrypt"');
+
+concat(input, function(error, buffer) {
+  if (error) die(error.message);
+  cipher[operation](buffer.toString('utf8'), function(error, result) {
+    if (error) die(error.message);
+    output.write(result);
+  });
+});
+

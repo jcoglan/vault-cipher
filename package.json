@@ -8,6 +8,8 @@
 , "version"         : "0.3.1"
 , "engines"         : {"node": ">=0.6.0"}
 , "main"            : "./lib/vault-cipher.js"
+, "bin"             : {"vault-cipher": "./bin/vault-cipher"}
+, "dependencies"    : {"nopt": ""}
 , "devDependencies" : {"jstest": ""}
 
 , "scripts"         : {"test": "node spec/node.js"}
