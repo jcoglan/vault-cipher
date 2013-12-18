@@ -1,7 +1,6 @@
 .git
 .gitignore
 .npmignore
-examples
 node_modules
 spec
 
