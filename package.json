@@ -9,10 +9,17 @@
 , "engines"         : {"node": ">=0.6.0"}
 , "main"            : "./lib/vault-cipher.js"
 , "bin"             : {"vault-cipher": "./bin/vault-cipher"}
-, "dependencies"    : {"nopt": ""}
-, "devDependencies" : {"jstest": ""}
 
-, "scripts"         : {"test": "node spec/node.js"}
+, "dependencies"    : { "crypto-js": ">= 3.1.0"
+                      , "nopt": ">= 3.0.0"
+                      }
+, "devDependencies" : { "jstest": "*"
+                      , "webpack": "*"
+                      }
+
+, "scripts"         : { "test": "node spec/main.js"
+                      , "webpack": "webpack --config spec/webpack.config.js --display-modules --watch"
+                      }
 
 , "repository"      : { "type"  : "git"
                       , "url"   : "git://github.com/jcoglan/vault-cipher.git"
@@ -20,4 +27,3 @@
 
 , "bugs"            : "http://github.com/jcoglan/vault-cipher/issues"
 }
-

@@ -1,0 +1,4 @@
+{
+  "main":     "node_buffer",
+  "browser":  "browser_buffer"
+}
