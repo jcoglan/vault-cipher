@@ -6,7 +6,7 @@
 , "license"         : "MIT"
 
 , "version"         : "0.4.0"
-, "engines"         : {"node": ">=0.6.0"}
+, "engines"         : {"node": ">= 0.8.0"}
 , "main"            : "./lib/vault-cipher.js"
 , "bin"             : {"vault-cipher": "./bin/vault-cipher"}
 
