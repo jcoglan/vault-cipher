@@ -1,3 +1,4 @@
+# vault-cipher [![Build Status](https://travis-ci.org/jcoglan/vault-cipher.svg)](https://travis-ci.org/jcoglan/vault-cipher)
 # vault-cipher
 
 Provides a high-level authenticated encryption API that
