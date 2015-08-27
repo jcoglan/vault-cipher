@@ -64,5 +64,16 @@ JS.Test.describe('vault-cipher', function() { with(this) {
     before(function() { this.format = 'hex' })
     itShouldBehaveLike('cipher algorithm')
   }})
-}})
 
+  it('decrypts a known ciphertext', function(resume) { with(this) {
+    var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
+        ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
+
+    cipher.decrypt(ciphertext, function(error, text) {
+      resume(function() {
+        assertNull( error )
+        assertEqual( 'answer me this', text )
+      })
+    })
+  }})
+}})
