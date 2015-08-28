@@ -3,8 +3,17 @@
 Provides a high-level authenticated encryption API that
 [Vault](http://github.com/jcoglan/vault) uses to encrypt its stored settings.
 It is not intended to be a long-term solution since eventually we will be able
-to use GCM mode or NaCl in Node, but for now I'm using a hand-rolled
-encrypt-then-MAC scheme based on AES-256-CBC and HMAC-SHA-256.
+to use GCM mode or NaCl in Node, but for now I'm using a hand-rolled scheme
+based on the following:
+
+* The given key is used to derive an encryption key and a signing key using
+  PBKDF2
+* A random `iv` is selected using `crypto.randomBytes()`
+* The plaintext is encrypted using AES-256-CBC with the encryption key and `iv`
+  to produce `ciphertext`
+* `iv` and `ciphertext` are concatenated and signed using HMAC-SHA-256 with the
+  signing key to produce `mac`
+* The result is the concatenation of `iv`, `ciphertext` and `mac`
 
 It is very high-level, providing a simple way to encrypt and decrypt text:
 
@@ -12,12 +21,10 @@ It is very high-level, providing a simple way to encrypt and decrypt text:
 var Cipher = require('vault-cipher'),
     cipher = new Cipher('your secret key');
 
-cipher.encrypt('some text', function(error, ciphertext) {
-
-  cipher.decrypt(ciphertext, function(error, message) {
-
-    // message == 'some text'
-  });
+cipher.encrypt('some text').then(function(ciphertext) {
+  return cipher.decrypt(ciphertext);
+}).then(function(message) {
+  // message == 'some text'
 });
 ```
 
