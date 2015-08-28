@@ -1,5 +1,6 @@
-var JS     = require('jstest'),
-    Cipher = require('..')
+var JS      = require('jstest'),
+    Cipher  = require('..'),
+    Promise = require('../lib/promise')
 
 JS.Test.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
@@ -9,18 +10,19 @@ JS.Test.describe('vault-cipher', function() { with(this) {
 
     describe('encryption', function() { with(this) {
       it('generates a different string every time', function(resume) { with(this) {
-        cipher.encrypt('hello', function(error, text1) {
-          cipher.encrypt('hello', function(error, text2) {
-            resume(function() { assertNotEqual( text1, text2 ) })
-          })
+        var p1 = cipher.encrypt('hello'),
+            p2 = cipher.encrypt('hello')
+
+        Promise.all([p1, p2]).then(function(texts) {
+          resume(function() { assertNotEqual( texts[0], texts[1] ) })
         })
       }})
 
       it('is reversible', function(resume) { with(this) {
-        cipher.encrypt('some content', function(error, text) {
-          cipher.decrypt(text, function(error, message) {
-            resume(function() { assertEqual( 'some content', message) })
-          })
+        cipher.encrypt('some content').then(function(text) {
+          return cipher.decrypt(text)
+        }).then(function(message) {
+          resume(function() { assertEqual( 'some content', message) })
         })
       }})
     }})
@@ -35,21 +37,15 @@ JS.Test.describe('vault-cipher', function() { with(this) {
       }})
 
       it('decrypts the ciphertext', function(resume) { with(this) {
-        cipher.decrypt(text, function(error, result) {
-          resume(function() {
-            assertNull( error )
-            assertEqual( message, result )
-          })
+        cipher.decrypt(text).then(function(result) {
+          resume(function() { assertEqual( message, result ) })
         })
       }})
 
       it('throws an error if the text is altered', function(resume) { with(this) {
         text = text.replace(/^..../, '0000')
-        cipher.decrypt(text, function(error, result) {
-          resume(function() {
-            assertNotNull( error )
-            assertSame( undefined, result )
-          })
+        cipher.decrypt(text).catch(function(error) {
+          resume(function() { assertNotNull( error ) })
         })
       }})
     }})
@@ -69,11 +65,8 @@ JS.Test.describe('vault-cipher', function() { with(this) {
     var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
-    cipher.decrypt(ciphertext, function(error, text) {
-      resume(function() {
-        assertNull( error )
-        assertEqual( 'answer me this', text )
-      })
+    cipher.decrypt(ciphertext).then(function(text) {
+      resume(function() { assertEqual( 'answer me this', text ) })
     })
   }})
 }})
