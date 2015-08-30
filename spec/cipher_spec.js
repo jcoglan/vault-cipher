@@ -1,5 +1,6 @@
 var JS      = require('jstest'),
     Cipher  = require('..'),
+    Buffer  = require('../lib/buffer').Buffer,
     Promise = require('../lib/promise')
 
 JS.Test.describe('vault-cipher', function() { with(this) {
@@ -66,6 +67,15 @@ JS.Test.describe('vault-cipher', function() { with(this) {
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
     cipher.decrypt(ciphertext).then(function(text) {
+      resume(function() { assertEqual( 'answer me this', text ) })
+    })
+  }})
+
+  it('decrypts a known ciphertext as a buffer', function(resume) { with(this) {
+    var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
+        ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
+
+    cipher.decrypt(new Buffer(ciphertext, 'base64')).then(function(text) {
       resume(function() { assertEqual( 'answer me this', text ) })
     })
   }})
