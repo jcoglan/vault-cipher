@@ -15,7 +15,29 @@ based on the following:
   signing key to produce `mac`
 * The result is the concatenation of `iv`, `ciphertext` and `mac`
 
-It is very high-level, providing a simple way to encrypt and decrypt text:
+```
++--------+      +--------+      +----------------+----------------+
+| secret |----->| PBKDF2 |----->| encryption key |  signing key   |
++--------+      +--------+      +----------------+----------------+
+                                    |                     |
++---------+                         V                     |
+| message |------------------>+-------------+             |
++---------+     +----+        | AES-256-CBC |             |
+                | iv |------->+-------------+             |
+                +----+              |                     |
+                   |                |                     |
+                   V                V                     V
+              +----------+------------------+     +--------------+
+              |    iv    |    ciphertext    |---->| HMAC-SHA-256 |
+              +----------+------------------+     +--------------+
+                      |               |                 |
+                      V               V                 V
+                  +----------+------------------+-----------+
+                  |    iv    |    ciphertext    |    mac    |
+                  +----------+------------------+-----------+
+```
+
+Its high-level API provides a simple way to encrypt and decrypt text:
 
 ```js
 var Cipher = require('vault-cipher'),
