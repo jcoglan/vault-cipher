@@ -1,7 +1,7 @@
 # vault-cipher [![Build Status](https://travis-ci.org/jcoglan/vault-cipher.svg)](https://travis-ci.org/jcoglan/vault-cipher)
 
 Provides a high-level authenticated encryption API that
-[Vault](http://github.com/jcoglan/vault) uses to encrypt its stored settings.
+[Vault](https://github.com/jcoglan/vault) uses to encrypt its stored settings.
 It is not intended to be a long-term solution since eventually we will be able
 to use GCM mode or NaCl in Node, but for now I'm using a hand-rolled scheme
 based on the following:

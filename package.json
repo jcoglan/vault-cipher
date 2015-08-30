@@ -1,6 +1,6 @@
 { "name"            : "vault-cipher"
 , "description"     : "High-level authenticated encryption API used by Vault"
-, "homepage"        : "http://github.com/jcoglan/vault-cipher"
+, "homepage"        : "https://github.com/jcoglan/vault-cipher"
 , "author"          : "James Coglan <jcoglan@gmail.com> (http://jcoglan.com/)"
 , "keywords"        : ["security", "encryption"]
 , "license"         : "MIT"
@@ -25,5 +25,5 @@
                       , "url"   : "git://github.com/jcoglan/vault-cipher.git"
                       }
 
-, "bugs"            : "http://github.com/jcoglan/vault-cipher/issues"
+, "bugs"            : "https://github.com/jcoglan/vault-cipher/issues"
 }
