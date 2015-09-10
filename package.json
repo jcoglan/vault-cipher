@@ -7,7 +7,7 @@
 
 , "version"         : "0.4.0"
 , "engines"         : {"node": ">= 0.8.0"}
-, "main"            : "./lib/vault-cipher.js"
+, "main"            : "./lib/index"
 , "bin"             : {"vault-cipher": "./bin/vault-cipher"}
 
 , "dependencies"    : { "crypto-js": ">= 3.1.0"
