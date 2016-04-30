@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var Cipher  = require('../lib/vault-cipher'),
+var Cipher  = require('..'),
     fs      = require('fs'),
     path    = require('path'),
     nopt    = require('nopt'),
