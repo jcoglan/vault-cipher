@@ -43,11 +43,9 @@ Its high-level API provides a simple way to encrypt and decrypt text:
 var Cipher = require('vault-cipher'),
     cipher = new Cipher('your secret key');
 
-cipher.encrypt('some text').then(function(ciphertext) {
-  return cipher.decrypt(ciphertext);
-}).then(function(message) {
-  // message == 'some text'
-});
+var ciphertext = cipher.encrypt('some text');
+
+cipher.decrypt(ciphertext) // -> 'some text'
 ```
 
 

@@ -1,7 +1,6 @@
-var JS      = require('jstest'),
-    Cipher  = require('..'),
-    Buffer  = require('../lib/buffer').Buffer,
-    Promise = require('../lib/promise')
+var JS     = require('jstest'),
+    Cipher = require('..'),
+    Buffer = require('../lib/buffer').Buffer
 
 JS.Test.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
@@ -10,44 +9,33 @@ JS.Test.describe('vault-cipher', function() { with(this) {
     }})
 
     describe('encryption', function() { with(this) {
-      it('generates a different string every time', function(resume) { with(this) {
+      it('generates a different string every time', function() { with(this) {
         var p1 = cipher.encrypt('hello'),
             p2 = cipher.encrypt('hello')
 
-        Promise.all([p1, p2]).then(function(texts) {
-          resume(function() { assertNotEqual( texts[0], texts[1] ) })
-        })
+        assertNotEqual( p1, p2 )
       }})
 
-      it('is reversible', function(resume) { with(this) {
-        cipher.encrypt('some content').then(function(text) {
-          return cipher.decrypt(text)
-        }).then(function(message) {
-          resume(function() { assertEqual( 'some content', message) })
-        })
+      it('is reversible', function() { with(this) {
+        var message = cipher.decrypt(cipher.encrypt('some content'))
+        assertEqual( 'some content', message )
       }})
     }})
 
     describe('decryption', function() { with(this) {
-      before(function(resume) { with(this) {
+      before(function() { with(this) {
         this.message = 'the secret message'
-        cipher.encrypt(message, function(error, text) {
-          this.text = text
-          resume()
-        }, this)
+        this.text = cipher.encrypt(message)
       }})
 
-      it('decrypts the ciphertext', function(resume) { with(this) {
-        cipher.decrypt(text).then(function(result) {
-          resume(function() { assertEqual( message, result ) })
-        })
+      it('decrypts the ciphertext', function() { with(this) {
+        var result = cipher.decrypt(text)
+        assertEqual( message, result )
       }})
 
-      it('throws an error if the text is altered', function(resume) { with(this) {
+      it('throws an error if the text is altered', function() { with(this) {
         text = text.replace(/^..../, '0000')
-        cipher.decrypt(text).catch(function(error) {
-          resume(function() { assertNotNull( error ) })
-        })
+        assertThrows(Error, function() { cipher.decrypt(text) })
       }})
     }})
   }})
@@ -62,21 +50,19 @@ JS.Test.describe('vault-cipher', function() { with(this) {
     itShouldBehaveLike('cipher algorithm')
   }})
 
-  it('decrypts a known ciphertext', function(resume) { with(this) {
+  it('decrypts a known ciphertext', function() { with(this) {
     var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
-    cipher.decrypt(ciphertext).then(function(text) {
-      resume(function() { assertEqual( 'answer me this', text ) })
-    })
+    var text = cipher.decrypt(ciphertext)
+    assertEqual( 'answer me this', text )
   }})
 
-  it('decrypts a known ciphertext as a buffer', function(resume) { with(this) {
+  it('decrypts a known ciphertext as a buffer', function() { with(this) {
     var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
-    cipher.decrypt(new Buffer(ciphertext, 'base64')).then(function(text) {
-      resume(function() { assertEqual( 'answer me this', text ) })
-    })
+    var text = cipher.decrypt(new Buffer(ciphertext, 'base64'))
+    assertEqual( 'answer me this', text )
   }})
 }})
