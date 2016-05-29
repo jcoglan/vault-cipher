@@ -56,8 +56,11 @@ if (['encrypt', 'decrypt'].indexOf(operation) < 0)
 
 concat(input, function(error, buffer) {
   if (error) die(error.message);
-  cipher[operation](buffer.toString('utf8'), function(error, result) {
-    if (error) die(error.message);
+
+  try {
+    var result = cipher[operation](buffer.toString('utf8'));
     output.write(result);
-  });
+  } catch (e) {
+    die(e.message);
+  }
 });
