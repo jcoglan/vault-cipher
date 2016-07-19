@@ -6,9 +6,9 @@
 , "license"         : "MIT"
 
 , "version"         : "0.4.0"
-, "engines"         : {"node": ">= 0.10.0"}
+, "engines"         : { "node": ">= 0.10.0" }
 , "main"            : "./lib/index"
-, "bin"             : {"vault-cipher": "./bin/vault-cipher"}
+, "bin"             : { "vault-cipher": "./bin/vault-cipher" }
 
 , "dependencies"    : { "crypto-js": ">= 3.1.0"
                       , "nopt": ">= 3.0.0"

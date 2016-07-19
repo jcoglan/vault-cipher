@@ -1,4 +1,4 @@
 {
-  "main":     "node_crypto",
-  "browser":  "browser_crypto"
+  "main":     "./node_crypto",
+  "browser":  "./browser_crypto"
 }
