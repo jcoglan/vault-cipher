@@ -1,6 +1,10 @@
-var JS     = require('jstest'),
-    Cipher = require('../'),
-    Buffer = Cipher.Buffer
+var JS      = require('jstest'),
+    Cipher  = require('../'),
+    Buffer  = Cipher.Buffer,
+    VERSION
+
+if (process.version)
+  VERSION = process.version.match(/[0-9]+/g).map(function(v) { return parseInt(v, 10) })
 
 JS.Test.describe('Buffer', function() { with(this) {
   this.define('getBytes', function(buffer) {
@@ -110,14 +114,16 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xe0, 0x81, 0xa1]).toString('utf8') )
     }})
 
-    it('converts encodings of high surrogates to literal surrogates', function() { with(this) {
-      // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
-      assertEqual( '\udb99', new Buffer([0xed, 0xae, 0x99]).toString('utf8') )
-    }})
+    if (!VERSION || VERSION[0] > 0) {
+      it('converts encodings of high surrogates to replacement characters', function() { with(this) {
+        // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
+        assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xae, 0x99]).toString('utf8') )
+      }})
 
-    it('converts encodings of low surrogates to literal surrogates', function() { with(this) {
-      // df00 = 1101111100000000 -> 11101101 10111100 10000000
-      assertEqual( '\udf00', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
-    }})
+      it('converts encodings of low surrogates to replacement characters', function() { with(this) {
+        // df00 = 1101111100000000 -> 11101101 10111100 10000000
+        assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
+      }})
+    }
   }})
 }})
