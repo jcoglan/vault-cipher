@@ -1,6 +1,6 @@
 var JS     = require('jstest'),
-    Cipher = require('..'),
-    Buffer = require('../lib/buffer').Buffer
+    Cipher = require('../'),
+    Buffer = Cipher.Buffer
 
 JS.Test.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
