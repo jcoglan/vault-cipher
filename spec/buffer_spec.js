@@ -114,16 +114,16 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xe0, 0x81, 0xa1]).toString('utf8') )
     }})
 
-    if (!VERSION || VERSION[0] > 0) {
-      it('converts encodings of high surrogates to replacement characters', function() { with(this) {
-        // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
-        assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xae, 0x99]).toString('utf8') )
-      }})
+    if (VERSION && VERSION[0] < 1) return
 
-      it('converts encodings of low surrogates to replacement characters', function() { with(this) {
-        // df00 = 1101111100000000 -> 11101101 10111100 10000000
-        assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
-      }})
-    }
+    it('converts encodings of high surrogates to replacement characters', function() { with(this) {
+      // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
+      assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xae, 0x99]).toString('utf8') )
+    }})
+
+    it('converts encodings of low surrogates to replacement characters', function() { with(this) {
+      // df00 = 1101111100000000 -> 11101101 10111100 10000000 = ed bc 80
+      assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
+    }})
   }})
 }})
