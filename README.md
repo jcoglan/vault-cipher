@@ -2,12 +2,17 @@
 
 Provides a high-level authenticated encryption API that
 [Vault](https://github.com/jcoglan/vault) uses to encrypt its stored settings.
-It is not intended to be a long-term solution since eventually we will be able
-to use GCM mode or NaCl in Node, but for now I'm using a hand-rolled scheme
-based on the following:
+On Node, it's backed by the [crypto](https://nodejs.org/api/crypto.html) module,
+while in the browser it uses
+[crypto-js](https://www.npmjs.com/package/crypto-js). Random values are
+generated with `crypto.randomBytes()` or `crypto.getRandomValues()` where
+available.
 
-* The given key is used to derive an encryption key and a signing key using
+The encryption algorithm is an encrypt-then-MAC scheme based on AES and HMAC.
+
+* The given secret is used to derive an encryption key and a signing key using
   PBKDF2
+* The plaintext is padded to a multiple of the AES block size using PKCS#7
 * A random `iv` is selected using `crypto.randomBytes()`
 * The plaintext is encrypted using AES-256-CBC with the encryption key and `iv`
   to produce `ciphertext`
@@ -71,7 +76,7 @@ The available options are:
 
 (The MIT License)
 
-Copyright (c) 2011-2015 James Coglan
+Copyright (c) 2011-2016 James Coglan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
