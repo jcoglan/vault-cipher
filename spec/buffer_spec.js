@@ -154,8 +154,6 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( -0x78,           buffer.readInt8(1) )
       assertEqual(  0x5e885b27,     buffer.readInt32BE(0) )
       assertEqual( -0x430df641,     buffer.readInt32BE(4) )
-      assertEqual(  0x5e885b27bcf2, buffer.readIntBE(0, 6) )
-      assertEqual( -0x77a4d8430df7, buffer.readIntBE(1, 6) )
     }})
 
     it('throws an error for out-of-bounds reads', function() { with(this) {
