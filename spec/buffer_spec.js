@@ -251,7 +251,7 @@ JS.Test.describe('Buffer', function() { with(this) {
     }
 
     it('returns an extended buffer', function() { with(this) {
-      assertEqual( '0102030405060700', Buffer.concat(bufs, 8).toString('hex') )
+      assertMatch( /^01020304050607..$/, Buffer.concat(bufs, 8).toString('hex') )
     }})
   }})
 
