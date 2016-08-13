@@ -126,4 +126,196 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
     }})
   }})
+
+  describe('{read,write}{U,}Int{8,16,32}{BE,LE}', function() { with(this) {
+    before(function() { with(this) {
+      this.buffer = new Buffer('5e885b27bcf209bf', 'hex')
+    }})
+
+    it('reads from offset 0 by default', function() { with(this) {
+      assertEqual( 0x5e,       buffer.readUInt8() )
+      assertEqual( 0x5e88,     buffer.readUInt16BE() )
+      assertEqual( 0x5e885b27, buffer.readUInt32BE() )
+    }})
+
+    it('reads from a given offset', function() { with(this) {
+      assertEqual( 0x88,       buffer.readUInt8(1) )
+      assertEqual( 0x885b,     buffer.readUInt16BE(1) )
+      assertEqual( 0x885b27bc, buffer.readUInt32BE(1) )
+    }})
+
+    it('reads little-endian values', function() { with(this) {
+      assertEqual( 0x885e,     buffer.readUInt16LE() )
+      assertEqual( 0x275b885e, buffer.readUInt32LE() )
+    }})
+
+    it('reads signed values', function() { with(this) {
+      assertEqual(  0x5e,           buffer.readInt8(0) )
+      assertEqual( -0x78,           buffer.readInt8(1) )
+      assertEqual(  0x5e885b27,     buffer.readInt32BE(0) )
+      assertEqual( -0x430df641,     buffer.readInt32BE(4) )
+      assertEqual(  0x5e885b27bcf2, buffer.readIntBE(0, 6) )
+      assertEqual( -0x77a4d8430df7, buffer.readIntBE(1, 6) )
+    }})
+
+    it('throws an error for out-of-bounds reads', function() { with(this) {
+      assertThrows(Error, function() { buffer.readUInt8(8) })
+      assertThrows(Error, function() { buffer.readUInt16BE(7) })
+      assertThrows(Error, function() { buffer.readUInt32BE(5) })
+    }})
+
+    it('writes to offset 0 by default', function() { with(this) {
+      buffer.writeUInt8(0xff)
+      assertEqual( 'ff885b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeUInt16BE(0xfefd)
+      assertEqual( 'fefd5b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeUInt32BE(0xfcfbfaf9)
+      assertEqual( 'fcfbfaf9bcf209bf', buffer.toString('hex') )
+    }})
+
+    it('writes to a given offset', function() { with(this) {
+      buffer.writeUInt8(0xff, 1)
+      assertEqual( '5eff5b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeUInt16BE(0xfefd, 2)
+      assertEqual( '5efffefdbcf209bf', buffer.toString('hex') )
+
+      buffer.writeUInt32BE(0xfcfbfaf9, 4)
+      assertEqual( '5efffefdfcfbfaf9', buffer.toString('hex') )
+    }})
+
+    it('writes little-endian values', function() { with(this) {
+      buffer.writeUInt16LE(0xfefd)
+      assertEqual( 'fdfe5b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeUInt32LE(0xfcfbfaf9)
+      assertEqual( 'f9fafbfcbcf209bf', buffer.toString('hex') )
+    }})
+
+    it('writes signed values', function() { with(this) {
+      buffer.writeInt8(-99)
+      assertEqual( '9d885b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeInt16BE(-16384)
+      assertEqual( 'c0005b27bcf209bf', buffer.toString('hex') )
+
+      buffer.writeInt32BE(-268435456)
+      assertEqual( 'f0000000bcf209bf', buffer.toString('hex') )
+    }})
+
+    it('throws an error for out-of-bounds writes', function() { with(this) {
+      assertThrows(Error, function() { buffer.writeUInt8(0, 8) })
+      assertThrows(Error, function() { buffer.writeUInt16BE(0, 7) })
+      assertThrows(Error, function() { buffer.writeUInt32BE(0, 5) })
+    }})
+
+    it('throws an error for out-of-range writes', function() { with(this) {
+      assertThrows(Error, function() { buffer.writeInt8(  Math.pow(2, 7) ) })
+      assertThrows(Error, function() { buffer.writeInt8(  -1 - Math.pow(2, 7) ) })
+      assertThrows(Error, function() { buffer.writeUInt8( Math.pow(2, 8) ) })
+      assertThrows(Error, function() { buffer.writeUInt8( -1 ) })
+
+      assertThrows(Error, function() { buffer.writeInt32BE(  Math.pow(2, 31) ) })
+      assertThrows(Error, function() { buffer.writeInt32BE(  -1 - Math.pow(2, 31) ) })
+      assertThrows(Error, function() { buffer.writeUInt32BE( Math.pow(2, 32) ) })
+      assertThrows(Error, function() { buffer.writeUInt32BE( -1 ) })
+    }})
+  }})
+
+  describe('concat()', function() { with(this) {
+    before(function() { with(this) {
+      this.bufs = [
+        new Buffer('01', 'hex'),
+        new Buffer('0203', 'hex'),
+        new Buffer('04050607', 'hex')
+      ]
+    }})
+
+    it('concatenates a list of buffers', function() { with(this) {
+      assertEqual( '01020304050607', Buffer.concat(bufs).toString('hex') )
+    }})
+
+    it('returns an empty buffer for zero length', function() { with(this) {
+      assertEqual( '', Buffer.concat(bufs, 0).toString('hex') )
+    }})
+
+    it('returns a truncated buffer', function() { with(this) {
+      assertEqual( '010203', Buffer.concat(bufs, 3).toString('hex') )
+    }})
+
+    it('returns an extended buffer', function() { with(this) {
+      assertEqual( '0102030405060700', Buffer.concat(bufs, 8).toString('hex') )
+    }})
+  }})
+
+  describe('copy()', function() { with(this) {
+    before(function() { with(this) {
+      this.source = new Buffer('0102030405', 'hex')
+      this.target = new Buffer('0000000000000000', 'hex')
+    }})
+
+    it('copies the whole source to the beginning of the target', function() { with(this) {
+      assertEqual( 5, source.copy(target) )
+      assertEqual( '0102030405000000', target.toString('hex') )
+    }})
+
+    it('copies the whole source to an offset in the target', function() { with(this) {
+      assertEqual( 5, source.copy(target, 2) )
+      assertEqual( '0000010203040500', target.toString('hex') )
+    }})
+
+    it('drops source material that escapes the target size', function() { with(this) {
+      assertEqual( 4, source.copy(target, 4) )
+      assertEqual( '0000000001020304', target.toString('hex') )
+    }})
+
+    it('does not modify the target if the offset is too high', function() { with(this) {
+      assertEqual( 0, source.copy(target, 8) )
+      assertEqual( '0000000000000000', target.toString('hex') )
+    }})
+
+    it('copies a portion of the source', function() { with(this) {
+      assertEqual( 3, source.copy(target, 0, 2) )
+      assertEqual( '0304050000000000', target.toString('hex') )
+    }})
+
+    it('copies none of the source if the offset is too high', function() { with(this) {
+      assertEqual( 0, source.copy(target, 0, 5) )
+      assertEqual( '0000000000000000', target.toString('hex') )
+    }})
+
+    it('copies a portion of the source with an end offset', function() { with(this) {
+      assertEqual( 2, source.copy(target, 0, 3, 5) )
+      assertEqual( '0405000000000000', target.toString('hex') )
+    }})
+
+    it('copies a portion of the source if the end offset is too high', function() { with(this) {
+      assertEqual( 2, source.copy(target, 0, 3, 6) )
+      assertEqual( '0405000000000000', target.toString('hex') )
+    }})
+  }})
+
+  describe('slice()', function() { with(this) {
+    before(function() { with(this) {
+      this.source = new Buffer('0102030405', 'hex')
+    }})
+
+    it('returns the whole of the source', function() { with(this) {
+      assertEqual( '0102030405', source.slice().toString('hex') )
+    }})
+
+    it('returns a portion of the source to the end', function() { with(this) {
+      assertEqual( '030405', source.slice(2).toString('hex') )
+    }})
+
+    it('returns a portion of the source', function() { with(this) {
+      assertEqual( '0304', source.slice(2, 4).toString('hex') )
+    }})
+
+    it('returns a portion of the source with negative offsets', function() { with(this) {
+      assertEqual( '0304', source.slice(-3, -1).toString('hex') )
+    }})
+  }})
 }})
