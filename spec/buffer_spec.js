@@ -132,11 +132,13 @@ JS.Test.describe('Buffer', function() { with(this) {
       this.buffer = new Buffer('5e885b27bcf209bf', 'hex')
     }})
 
-    it('reads from offset 0 by default', function() { with(this) {
-      assertEqual( 0x5e,       buffer.readUInt8() )
-      assertEqual( 0x5e88,     buffer.readUInt16BE() )
-      assertEqual( 0x5e885b27, buffer.readUInt32BE() )
-    }})
+    if (!VERSION || VERSION[0] > 0 || VERSION[1] >= 12) {
+      it('reads from offset 0 by default', function() { with(this) {
+        assertEqual( 0x5e,       buffer.readUInt8() )
+        assertEqual( 0x5e88,     buffer.readUInt16BE() )
+        assertEqual( 0x5e885b27, buffer.readUInt32BE() )
+      }})
+    }
 
     it('reads from a given offset', function() { with(this) {
       assertEqual( 0x88,       buffer.readUInt8(1) )
@@ -145,8 +147,8 @@ JS.Test.describe('Buffer', function() { with(this) {
     }})
 
     it('reads little-endian values', function() { with(this) {
-      assertEqual( 0x885e,     buffer.readUInt16LE() )
-      assertEqual( 0x275b885e, buffer.readUInt32LE() )
+      assertEqual( 0x885e,     buffer.readUInt16LE(0) )
+      assertEqual( 0x275b885e, buffer.readUInt32LE(0) )
     }})
 
     it('reads signed values', function() { with(this) {
@@ -162,16 +164,18 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertThrows(Error, function() { buffer.readUInt32BE(5) })
     }})
 
-    it('writes to offset 0 by default', function() { with(this) {
-      buffer.writeUInt8(0xff)
-      assertEqual( 'ff885b27bcf209bf', buffer.toString('hex') )
+    if (!VERSION || VERSION[0] > 0 || VERSION[1] >= 12) {
+      it('writes to offset 0 by default', function() { with(this) {
+        buffer.writeUInt8(0xff)
+        assertEqual( 'ff885b27bcf209bf', buffer.toString('hex') )
 
-      buffer.writeUInt16BE(0xfefd)
-      assertEqual( 'fefd5b27bcf209bf', buffer.toString('hex') )
+        buffer.writeUInt16BE(0xfefd)
+        assertEqual( 'fefd5b27bcf209bf', buffer.toString('hex') )
 
-      buffer.writeUInt32BE(0xfcfbfaf9)
-      assertEqual( 'fcfbfaf9bcf209bf', buffer.toString('hex') )
-    }})
+        buffer.writeUInt32BE(0xfcfbfaf9)
+        assertEqual( 'fcfbfaf9bcf209bf', buffer.toString('hex') )
+      }})
+    }
 
     it('writes to a given offset', function() { with(this) {
       buffer.writeUInt8(0xff, 1)
@@ -185,21 +189,21 @@ JS.Test.describe('Buffer', function() { with(this) {
     }})
 
     it('writes little-endian values', function() { with(this) {
-      buffer.writeUInt16LE(0xfefd)
+      buffer.writeUInt16LE(0xfefd, 0)
       assertEqual( 'fdfe5b27bcf209bf', buffer.toString('hex') )
 
-      buffer.writeUInt32LE(0xfcfbfaf9)
+      buffer.writeUInt32LE(0xfcfbfaf9, 0)
       assertEqual( 'f9fafbfcbcf209bf', buffer.toString('hex') )
     }})
 
     it('writes signed values', function() { with(this) {
-      buffer.writeInt8(-99)
+      buffer.writeInt8(-99, 0)
       assertEqual( '9d885b27bcf209bf', buffer.toString('hex') )
 
-      buffer.writeInt16BE(-16384)
+      buffer.writeInt16BE(-16384, 0)
       assertEqual( 'c0005b27bcf209bf', buffer.toString('hex') )
 
-      buffer.writeInt32BE(-268435456)
+      buffer.writeInt32BE(-268435456, 0)
       assertEqual( 'f0000000bcf209bf', buffer.toString('hex') )
     }})
 
@@ -239,9 +243,12 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( '', Buffer.concat(bufs, 0).toString('hex') )
     }})
 
-    it('returns a truncated buffer', function() { with(this) {
-      assertEqual( '010203', Buffer.concat(bufs, 3).toString('hex') )
-    }})
+
+    if (!VERSION || VERSION[0] > 0 || VERSION[1] >= 12) {
+      it('returns a truncated buffer', function() { with(this) {
+        assertEqual( '010203', Buffer.concat(bufs, 3).toString('hex') )
+      }})
+    }
 
     it('returns an extended buffer', function() { with(this) {
       assertEqual( '0102030405060700', Buffer.concat(bufs, 8).toString('hex') )
@@ -269,10 +276,12 @@ JS.Test.describe('Buffer', function() { with(this) {
       assertEqual( '0000000001020304', target.toString('hex') )
     }})
 
-    it('does not modify the target if the offset is too high', function() { with(this) {
-      assertEqual( 0, source.copy(target, 8) )
-      assertEqual( '0000000000000000', target.toString('hex') )
-    }})
+    if (!VERSION || VERSION[0] > 0 || VERSION[1] >= 12) {
+      it('does not modify the target if the offset is too high', function() { with(this) {
+        assertEqual( 0, source.copy(target, 8) )
+        assertEqual( '0000000000000000', target.toString('hex') )
+      }})
+    }
 
     it('copies a portion of the source', function() { with(this) {
       assertEqual( 3, source.copy(target, 0, 2) )
