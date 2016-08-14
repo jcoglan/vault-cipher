@@ -1,4 +1,4 @@
-var JS      = require('jstest'),
+var jstest  = require('jstest').Test,
     Cipher  = require('../'),
     Buffer  = Cipher.Buffer,
     VERSION
@@ -6,7 +6,7 @@ var JS      = require('jstest'),
 if (process.version)
   VERSION = process.version.match(/[0-9]+/g).map(function(v) { return parseInt(v, 10) })
 
-JS.Test.describe('Buffer', function() { with(this) {
+jstest.describe('Buffer', function() { with(this) {
   this.define('getBytes', function(buffer) {
     var array = [], i = buffer.length
     while (i--) array[i] = buffer.readUInt8(i)

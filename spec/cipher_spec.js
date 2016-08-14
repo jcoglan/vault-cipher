@@ -1,8 +1,8 @@
-var JS     = require('jstest'),
+var jstest = require('jstest').Test,
     Cipher = require('../'),
     Buffer = Cipher.Buffer
 
-JS.Test.describe('vault-cipher', function() { with(this) {
+jstest.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
     before(function() { with(this) {
       this.cipher = new Cipher('the-key', {format: format, work: 1})

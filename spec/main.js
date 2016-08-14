@@ -1,7 +1,7 @@
-var JS = require('jstest')
+var jstest = require('jstest').Test
 
 require('./buffer_spec')
 require('./crypto_spec')
 require('./cipher_spec')
 
-JS.Test.autorun()
+jstest.autorun()

@@ -1,10 +1,10 @@
-var JS      = require('jstest'),
+var jstest  = require('jstest').Test,
     Cipher  = require('../'),
     crypto  = Cipher.crypto,
     Buffer  = Cipher.Buffer,
     VERSION
 
-JS.Test.describe('crypto', function() { with(this) {
+jstest.describe('crypto', function() { with(this) {
   before(function() { with(this) {
     this.key = new Buffer('5AbFdjdUpIhx5hVeFrEpWYLucIogiXH9bOvFiOHLrBI=', 'base64')
     this.iv  = new Buffer('JQLZwyFW8v1lz7Cm/ino5w==', 'base64')
