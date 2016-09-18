@@ -35,7 +35,7 @@ var concat = function(stream, callback) {
     }
     callback(null, buffer);
   });
-  stream.on('error', function() {
+  stream.on('error', function(error) {
     callback(error);
   });
 };
