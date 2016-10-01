@@ -28,8 +28,8 @@ whether they are implemented in various libraries.
 | AES-256-GCM        |           |          | Y     | Y    |           | Y         | Y      |
 | HMAC-SHA1          |           |          |       |      |           |           |        |
 | HMAC-SHA256        |           |          |       |      |           |           |        |
-| PBKDF2-HMAC-SHA1   |           | Y        | Y     |      | Y         | Y         | Y      |
-| PBKDF2-HMAC-SHA256 |           | Y        | Y     | Y    |           | Y         | Y      |
+| PBKDF2-HMAC-SHA1   | Y         | Y        | Y     |      | Y         | Y         | Y      |
+| PBKDF2-HMAC-SHA256 | Y         | Y        | Y     | Y    |           | Y         | Y      |
 
 We would like to eventually AES-GCM, but as it is not available on some
 platforms we target, we're sticking with encrypt-then-MAC using AES-CBC and

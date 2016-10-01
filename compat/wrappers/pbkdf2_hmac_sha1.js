@@ -1,6 +1,19 @@
 'use strict';
 
 
+// asmCrypto
+
+function asm_pbkdf2_hmac_sha1(pw, salt, work, len) {
+  var pbkdf2 = asmCrypto.PBKDF2_HMAC_SHA1.bytes(
+          pw.toString('binary'),
+          salt.toString('binary'),
+          work,
+          len);
+
+  return new Buffer(pbkdf2).toString('base64');
+}
+
+
 // CryptoJS
 
 var B64 = CryptoJS.enc.Base64;
@@ -54,6 +67,7 @@ function sjcl_pbkdf2_hmac_sha1(pw, salt, work, len) {
 
 if (typeof module === 'object')
   module.exports = {
+    asm_pbkdf2_hmac_sha1:   asm_pbkdf2_hmac_sha1,
     cjs_pbkdf2_hmac_sha1:   cjs_pbkdf2_hmac_sha1,
     forge_pbkdf2_hmac_sha1: forge_pbkdf2_hmac_sha1,
     node_pbkdf2_hmac_sha1:  node_pbkdf2_hmac_sha1,

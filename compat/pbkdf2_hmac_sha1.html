@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PBKDF2-HMAC-SHA1</title>
+    <script src="./bundles/buffer.js"></script>
+    <script src="../node_modules/asmcrypto.js/asmcrypto.js"></script>
+    <script src="../node_modules/crypto-js/crypto-js.js"></script>
+    <script src="../node_modules/sjcl/sjcl.js"></script>
+    <script src="./forge.min.js"></script>
+  </head>
+  <body>
+
+    <h1>PBKDF2-HMAC-SHA1</h1>
+
+    <script src="./wrappers/pbkdf2_hmac_sha1.js"></script>
+
+    <script>
+      var pw   = new Buffer(crypto.getRandomValues(new Uint8Array(16))),
+          salt = new Buffer(crypto.getRandomValues(new Uint8Array(16))),
+          work = 100,
+          len  = 32;
+
+      console.log('[asm  ]', asm_pbkdf2_hmac_sha1(pw, salt, work, len));
+      console.log('[cjs  ]', cjs_pbkdf2_hmac_sha1(pw, salt, work, len));
+      console.log('[forge]', forge_pbkdf2_hmac_sha1(pw, salt, work, len));
+      console.log('[sjcl ]', sjcl_pbkdf2_hmac_sha1(pw, salt, work, len));
+    </script>
+
+  </body>
+</html>
