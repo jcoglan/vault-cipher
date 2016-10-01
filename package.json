@@ -15,10 +15,14 @@
                       }
 , "devDependencies" : { "jstest": "*"
                       , "webpack": "*"
+                      , "benchmark": "*"
+                      , "asmcrypto.js": "*"
+                      , "node-forge": "*"
+                      , "sjcl": "*"
                       }
 
 , "scripts"         : { "test": "node spec/main.js"
-                      , "webpack": "webpack --config spec/webpack.config.js --display-modules --watch"
+                      , "webpack": "webpack --config webpack.config.js --display-modules --watch"
                       }
 
 , "repository"      : { "type"  : "git"

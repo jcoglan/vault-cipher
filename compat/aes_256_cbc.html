@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AES-256-CBC</title>
+    <script src="./bundles/buffer.js"></script>
+    <script src="../node_modules/asmcrypto.js/asmcrypto.js"></script>
+    <script src="../node_modules/crypto-js/crypto-js.js"></script>
+    <script src="./forge.min.js"></script>
+  </head>
+  <body>
+
+    <h1>AES-256-CBC</h1>
+
+    <script src="./wrappers/aes_256_cbc.js"></script>
+
+    <script>
+      var key = new Buffer(crypto.getRandomValues(new Uint8Array(32))),
+          iv  = new Buffer(crypto.getRandomValues(new Uint8Array(16))),
+          msg = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+
+      console.log('[asm  ]', asm_aes_256_cbc(key, iv, msg));
+      console.log('[cjs  ]', cjs_aes_256_cbc(key, iv, msg));
+      console.log('[forge]', forge_aes_256_cbc(key, iv, msg));
+
+      console.log('[asm  ]', asm_decrypt_aes_256_cbc(key, iv, asm_aes_256_cbc(key, iv, msg)));
+      console.log('[cjs  ]', cjs_decrypt_aes_256_cbc(key, iv, cjs_aes_256_cbc(key, iv, msg)));
+      console.log('[forge]', forge_decrypt_aes_256_cbc(key, iv, forge_aes_256_cbc(key, iv, msg)));
+     </script>
+
+  </body>
+</html>
