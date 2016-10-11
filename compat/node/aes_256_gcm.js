@@ -4,7 +4,7 @@ global.crypto = require('crypto'),
 global.forge  = require('node-forge');
 global.sjcl   = require('sjcl');
 
-var f = require('./wrappers/aes_256_gcm');
+var f = require('../wrappers/aes_256_gcm');
 
 var key = crypto.randomBytes(32),
     iv  = crypto.randomBytes(12),

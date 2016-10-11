@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>PBKDF2-HMAC-SHA256</title>
-    <script src="./bundles/buffer.js"></script>
-    <script src="./vendor/asmcrypto.js"></script>
-    <script src="../node_modules/crypto-js/crypto-js.js"></script>
-    <script src="./vendor/forge.min.js"></script>
-    <script src="../node_modules/sjcl/sjcl.js"></script>
+    <script src="../bundles/buffer.js"></script>
+    <script src="../vendor/asmcrypto.js"></script>
+    <script src="../../node_modules/crypto-js/crypto-js.js"></script>
+    <script src="../vendor/forge.min.js"></script>
+    <script src="../../node_modules/sjcl/sjcl.js"></script>
   </head>
   <body>
 
     <h1>PBKDF2-HMAC-SHA256</h1>
 
-    <script src="./wrappers/pbkdf2_hmac_sha256.js"></script>
+    <script src="../wrappers/pbkdf2_hmac_sha256.js"></script>
 
     <script>
       var pw   = new Buffer(crypto.getRandomValues(new Uint8Array(16))),

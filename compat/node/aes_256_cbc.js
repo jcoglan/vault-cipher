@@ -4,7 +4,7 @@ global.crypto   = require('crypto');
 global.CryptoJS = require('crypto-js');
 global.forge    = require('node-forge');
 
-var f = require('./wrappers/aes_256_cbc');
+var f = require('../wrappers/aes_256_cbc');
 
 var key = crypto.randomBytes(32),
     iv  = crypto.randomBytes(16),

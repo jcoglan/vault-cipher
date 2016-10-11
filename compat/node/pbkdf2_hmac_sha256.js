@@ -6,7 +6,7 @@ global.CryptoJS = require('crypto-js');
 global.forge    = require('node-forge');
 global.sjcl     = require('sjcl');
 
-var f = require('./wrappers/pbkdf2_hmac_sha256');
+var f = require('../wrappers/pbkdf2_hmac_sha256');
 
 var pw   = crypto.randomBytes(16),
     salt = crypto.randomBytes(16),

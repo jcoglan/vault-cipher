@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>AES-256-GCM</title>
-    <script src="./bundles/buffer.js"></script>
-    <script src="./vendor/forge.min.js"></script>
-    <script src="../node_modules/sjcl/sjcl.js"></script>
+    <script src="../bundles/buffer.js"></script>
+    <script src="../vendor/forge.min.js"></script>
+    <script src="../../node_modules/sjcl/sjcl.js"></script>
   </head>
   <body>
 
     <h1>AES-256-GCM</h1>
 
-    <script src="./wrappers/aes_256_gcm.js"></script>
+    <script src="../wrappers/aes_256_gcm.js"></script>
 
     <script>
       var key = new Buffer(crypto.getRandomValues(new Uint8Array(32))),
