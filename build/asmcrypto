@@ -1,0 +1,10 @@
+#!/bin/bash
+
+MODULES="aes-cbc,aes-gcm,hmac-sha1,hmac-sha256,pbkdf2-hmac-sha1,pbkdf2-hmac-sha256"
+
+cd node_modules/asmcrypto.js
+npm install
+WITH="$MODULES" ./node_modules/.bin/grunt
+cd -
+mkdir -p compat/vendor
+cp node_modules/asmcrypto.js/asmcrypto.js* compat/vendor/
