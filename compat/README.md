@@ -25,7 +25,7 @@ whether they are implemented in various libraries.
 |                    | asmCrypto | CryptoJS | Forge | SJCL | Node 0.10 | Node 0.12 | Node 4 |
 | ------------------ | --------- | -------- | ----- | ---- | --------- | --------- | ------ |
 | AES-256-CBC        | Y         | Y        | Y     |      | Y         | Y         | Y      |
-| AES-256-GCM        |           |          | Y     | Y    |           | Y         | Y      |
+| AES-256-GCM        | Y         |          | Y     | Y    |           | Y         | Y      |
 | HMAC-SHA1          |           |          |       |      |           |           |        |
 | HMAC-SHA256        |           |          |       |      |           |           |        |
 | PBKDF2-HMAC-SHA1   | Y         | Y        | Y     |      | Y         | Y         | Y      |

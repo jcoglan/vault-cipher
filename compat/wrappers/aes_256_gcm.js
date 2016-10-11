@@ -1,6 +1,29 @@
 'use strict';
 
 
+// asmCrypto
+
+function asm_aes_256_gcm(key, iv, msg) {
+  var ct = asmCrypto.AES_GCM.encrypt(
+          msg.toString('binary'),
+          key.toString('binary'),
+          iv.toString('binary'));
+
+  return new Buffer(ct).toString('base64');
+}
+
+function asm_decrypt_aes_256_gcm(key, iv, ct) {
+  ct = new Buffer(ct, 'base64');
+
+  var pt = asmCrypto.AES_GCM.decrypt(
+          ct.toString('binary'),
+          key.toString('binary'),
+          iv.toString('binary'));
+
+  return new Buffer(pt).toString();
+}
+
+
 // Forge
 
 function forge_aes_256_gcm(key, iv, msg) {
@@ -86,12 +109,17 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
 }
 
 
-if (typeof module === 'object')
-  module.exports = {
-    forge_aes_256_gcm:         forge_aes_256_gcm,
-    forge_decrypt_aes_256_gcm: forge_decrypt_aes_256_gcm,
-    node_aes_256_gcm:          node_aes_256_gcm,
-    node_decrypt_aes_256_gcm:  node_decrypt_aes_256_gcm,
-    sjcl_aes_256_gcm:          sjcl_aes_256_gcm,
-    sjcl_decrypt_aes_256_gcm:  sjcl_decrypt_aes_256_gcm
-  };
+var isNode = (typeof module === 'object'),
+    key    = crypto.randomBytes(32),
+    iv     = crypto.randomBytes(12),
+    msg    = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+
+console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
+console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
+if (isNode) console.log('[node ]', node_aes_256_gcm(key, iv, msg));
+console.log('[sjcl ]', sjcl_aes_256_gcm(key, iv, msg));
+
+console.log('[asm  ]', asm_decrypt_aes_256_gcm(key, iv, asm_aes_256_gcm(key, iv, msg)));
+console.log('[forge]', forge_decrypt_aes_256_gcm(key, iv, forge_aes_256_gcm(key, iv, msg)));
+if (isNode) console.log('[node ]', node_decrypt_aes_256_gcm(key, iv, node_aes_256_gcm(key, iv, msg)));
+console.log('[sjcl ]', sjcl_decrypt_aes_256_gcm(key, iv, sjcl_aes_256_gcm(key, iv, msg)));

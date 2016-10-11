@@ -3,27 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>AES-256-GCM</title>
-    <script src="../bundles/buffer.js"></script>
-    <script src="../vendor/forge.min.js"></script>
-    <script src="../../node_modules/sjcl/sjcl.js"></script>
   </head>
   <body>
 
     <h1>AES-256-GCM</h1>
 
+    <script src="../bundles/buffer.js"></script>
+    <script src="../vendor/asmcrypto.js"></script>
+    <script src="../vendor/forge.min.js"></script>
+    <script src="../../node_modules/sjcl/sjcl.js"></script>
+
     <script src="../wrappers/aes_256_gcm.js"></script>
-
-    <script>
-      var key = new Buffer(crypto.getRandomValues(new Uint8Array(32))),
-          iv  = new Buffer(crypto.getRandomValues(new Uint8Array(12))),
-          msg = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
-
-      console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
-      console.log('[sjcl ]', sjcl_aes_256_gcm(key, iv, msg));
-
-      console.log('[forge]', forge_decrypt_aes_256_gcm(key, iv, forge_aes_256_gcm(key, iv, msg)));
-      console.log('[sjcl ]', sjcl_decrypt_aes_256_gcm(key, iv, sjcl_aes_256_gcm(key, iv, msg)));
-     </script>
 
   </body>
 </html>

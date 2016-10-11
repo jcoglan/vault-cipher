@@ -8,7 +8,7 @@ function asm_aes_256_cbc(key, iv, msg) {
           msg.toString('binary'),
           key.toString('binary'),
           undefined,
-          iv.toString('binary'))
+          iv.toString('binary'));
 
   return new Buffer(ct).toString('base64');
 }
@@ -103,14 +103,17 @@ function node_decrypt_aes_256_cbc(key, iv, ct) {
 }
 
 
-if (typeof module === 'object')
-  module.exports = {
-    asm_aes_256_cbc:           asm_aes_256_cbc,
-    asm_decrypt_aes_256_cbc:   asm_decrypt_aes_256_cbc,
-    cjs_aes_256_cbc:           cjs_aes_256_cbc,
-    cjs_decrypt_aes_256_cbc:   cjs_decrypt_aes_256_cbc,
-    forge_aes_256_cbc:         forge_aes_256_cbc,
-    forge_decrypt_aes_256_cbc: forge_decrypt_aes_256_cbc,
-    node_aes_256_cbc:          node_aes_256_cbc,
-    node_decrypt_aes_256_cbc:  node_decrypt_aes_256_cbc
-  };
+var isNode = (typeof module === 'object'),
+    key    = crypto.randomBytes(32),
+    iv     = crypto.randomBytes(16),
+    msg    = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+
+console.log('[asm  ]', asm_aes_256_cbc(key, iv, msg));
+console.log('[cjs  ]', cjs_aes_256_cbc(key, iv, msg));
+console.log('[forge]', forge_aes_256_cbc(key, iv, msg));
+if (isNode) console.log('[node ]', node_aes_256_cbc(key, iv, msg));
+
+console.log('[asm  ]', asm_decrypt_aes_256_cbc(key, iv, asm_aes_256_cbc(key, iv, msg)));
+console.log('[cjs  ]', cjs_decrypt_aes_256_cbc(key, iv, cjs_aes_256_cbc(key, iv, msg)));
+console.log('[forge]', forge_decrypt_aes_256_cbc(key, iv, forge_aes_256_cbc(key, iv, msg)));
+if (isNode) console.log('[node ]', node_decrypt_aes_256_cbc(key, iv, node_aes_256_cbc(key, iv, msg)));

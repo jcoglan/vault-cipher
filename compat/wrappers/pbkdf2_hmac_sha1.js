@@ -65,11 +65,43 @@ function sjcl_pbkdf2_hmac_sha1(pw, salt, work, len) {
 }
 
 
-if (typeof module === 'object')
-  module.exports = {
-    asm_pbkdf2_hmac_sha1:   asm_pbkdf2_hmac_sha1,
-    cjs_pbkdf2_hmac_sha1:   cjs_pbkdf2_hmac_sha1,
-    forge_pbkdf2_hmac_sha1: forge_pbkdf2_hmac_sha1,
-    node_pbkdf2_hmac_sha1:  node_pbkdf2_hmac_sha1,
-    sjcl_pbkdf2_hmac_sha1:  sjcl_pbkdf2_hmac_sha1
-  };
+var isNode = (typeof module === 'object'),
+    pw     = crypto.randomBytes(16),
+    salt   = crypto.randomBytes(16),
+    work   = 100,
+    len    = 32;
+
+console.log('[asm  ]', asm_pbkdf2_hmac_sha1(pw, salt, work, len));
+console.log('[cjs  ]', cjs_pbkdf2_hmac_sha1(pw, salt, work, len));
+console.log('[forge]', forge_pbkdf2_hmac_sha1(pw, salt, work, len));
+if (isNode) console.log('[node ]', node_pbkdf2_hmac_sha1(pw, salt, work, len));
+console.log('[sjcl ]', sjcl_pbkdf2_hmac_sha1(pw, salt, work, len));
+
+var suite = new Benchmark.Suite();
+
+suite.add('asmCrypto PBKDF2', function() {
+  asm_pbkdf2_hmac_sha1(pw, salt, work, len);
+});
+
+suite.add('CryptoJS PBKDF2', function() {
+  cjs_pbkdf2_hmac_sha1(pw, salt, work, len);
+});
+
+suite.add('Forge PBKDF2', function() {
+  forge_pbkdf2_hmac_sha1(pw, salt, work, len);
+});
+
+suite.add('SJCL PBKDF2', function() {
+  sjcl_pbkdf2_hmac_sha1(pw, salt, work, len);
+});
+
+if (isNode)
+  suite.add('Node PBKDF2', function() {
+    node_pbkdf2_hmac_sha1(pw, salt, work, len);
+  });
+
+suite.on('complete', function() {
+  this.forEach(function(result) { console.log(result.toString()) });
+});
+
+suite.run();
