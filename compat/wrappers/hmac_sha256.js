@@ -69,3 +69,32 @@ console.log('[cjs  ]', cjs_hmac_sha256(key, msg));
 console.log('[forge]', forge_hmac_sha256(key, msg));
 if (isNode) console.log('[node ]', node_hmac_sha256(key, msg));
 console.log('[sjcl ]', sjcl_hmac_sha256(key, msg));
+
+var suite = new Benchmark.Suite();
+
+suite.add('asmCrypto HMAC', function() {
+  asm_hmac_sha256(key, msg);
+});
+
+suite.add('CryptoJS HMAC', function() {
+  cjs_hmac_sha256(key, msg);
+});
+
+suite.add('Forge HMAC', function() {
+  forge_hmac_sha256(key, msg);
+});
+
+suite.add('SJCL HMAC', function() {
+  sjcl_hmac_sha256(key, msg);
+});
+
+if (isNode)
+  suite.add('Node HMAC', function() {
+    node_hmac_sha256(key, msg);
+  });
+
+suite.on('complete', function() {
+  this.forEach(function(result) { console.log(result.toString()) });
+});
+
+suite.run();
