@@ -8,3 +8,4 @@ WITH="$MODULES" ./node_modules/.bin/grunt
 cd -
 mkdir -p compat/vendor
 cp node_modules/asmcrypto.js/asmcrypto.js* compat/vendor/
+cp compat/vendor/asmcrypto.js* lib/crypto/
