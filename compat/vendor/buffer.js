@@ -1,4 +1,4 @@
-var Buffer = require('../lib/buffer').Buffer;
+var Buffer = require('../../lib/buffer').Buffer;
 
 window.Buffer = Buffer;
 

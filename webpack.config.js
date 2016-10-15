@@ -4,7 +4,7 @@ module.exports = {
   devtool:  'sourcemap',
 
   entry: {
-    'compat/bundles/buffer': path.join(__dirname, 'compat', 'buffer'),
+    'compat/bundles/buffer': path.join(__dirname, 'compat', 'vendor', 'buffer'),
     'spec/browser_bundle':   path.join(__dirname, 'spec', 'main')
   },
 
