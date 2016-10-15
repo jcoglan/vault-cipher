@@ -26,8 +26,8 @@ whether they are implemented in various libraries.
 | ------------------ | --------- | -------- | ----- | ---- | --------- | --------- | ------ |
 | AES-256-CBC        | Y         | Y        | Y     |      | Y         | Y         | Y      |
 | AES-256-GCM        | Y         |          | Y     | Y    |           | Y         | Y      |
-| HMAC-SHA1          |           |          |       |      |           |           |        |
-| HMAC-SHA256        |           |          |       |      |           |           |        |
+| HMAC-SHA1          | Y         | Y        | Y     |      | Y         | Y         | Y      |
+| HMAC-SHA256        | Y         | Y        | Y     | Y    | Y         | Y         | Y      |
 | PBKDF2-HMAC-SHA1   | Y         | Y        | Y     |      | Y         | Y         | Y      |
 | PBKDF2-HMAC-SHA256 | Y         | Y        | Y     | Y    |           | Y         | Y      |
 
