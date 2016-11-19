@@ -2,5 +2,8 @@
 .gitignore
 .npmignore
 .travis.yml
+build
+compat
 node_modules
 spec
+webpack.config.js
