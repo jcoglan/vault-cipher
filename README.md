@@ -69,4 +69,4 @@ The available options are:
 * `salt`: a salt string used during PBKDF2 key derivation, defaults to a GUID
   embedded in the library
 * `work`: the number of PBKDF2 iterations used to derive the encryption and
-  signing keys, default is `1000`
+  signing keys, default is `10,000`
