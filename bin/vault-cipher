@@ -28,11 +28,7 @@ var concat = function(stream, callback) {
     size += c.length;
   });
   stream.on('end', function() {
-    var buffer = new Buffer(size), offset = 0;
-    for (var i = 0, n = chunks.length; i < n; i++) {
-      chunks[i].copy(buffer, offset);
-      offset = chunks[i].length;
-    }
+    var buffer = Buffer.concat(chunks, size);
     callback(null, buffer);
   });
   stream.on('error', function(error) {
