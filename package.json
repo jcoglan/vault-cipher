@@ -10,12 +10,13 @@
 , "main"            : "./lib/index"
 , "bin"             : { "vault-cipher": "./bin/vault-cipher" }
 
-, "dependencies"    : { "nopt": ">= 3.0.0" }
+, "dependencies"    : { "asmcrypto.js": "~0.0.11"
+                      , "nopt": ">= 3.0.0"
+                      }
 
 , "devDependencies" : { "jstest": "*"
                       , "webpack": "*"
                       , "benchmark": "*"
-                      , "asmcrypto.js": "*"
                       , "crypto-js": "*"
                       , "node-forge": "*"
                       , "sjcl": "*"
