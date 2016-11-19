@@ -4,7 +4,7 @@ Provides a high-level authenticated encryption API that
 [Vault](https://github.com/jcoglan/vault) uses to encrypt its stored settings.
 On Node, it's backed by the [crypto](https://nodejs.org/api/crypto.html) module,
 while in the browser it uses
-[crypto-js](https://www.npmjs.com/package/crypto-js). Random values are
+[asmCrypto](https://github.com/vibornoff/asmcrypto.js/). Random values are
 generated with `crypto.randomBytes()` or `crypto.getRandomValues()` where
 available.
 
