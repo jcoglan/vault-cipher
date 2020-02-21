@@ -6,7 +6,7 @@
 , "license"         : "MIT"
 
 , "version"         : "0.4.0"
-, "engines"         : { "node": ">= 0.10.0" }
+, "engines"         : { "node": ">= 4.0.0" }
 , "main"            : "./lib/index"
 , "bin"             : { "vault-cipher": "./bin/vault-cipher" }
 
