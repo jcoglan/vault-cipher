@@ -59,7 +59,7 @@ cipher.decrypt(ciphertext) // -> 'some text'
 The cipher is configurable by passing options to the constructor, for example:
 
 ```js
-var cipher = new Cipher('secret key', {format: 'hex', work: 1000})
+var cipher = new Cipher('secret key', { format: 'hex', work: 1000 })
 ```
 
 The available options are:

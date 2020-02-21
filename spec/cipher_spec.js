@@ -5,7 +5,7 @@ var jstest = require('jstest').Test,
 jstest.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
     before(function() { with(this) {
-      this.cipher = new Cipher('the-key', {format: format, work: 1})
+      this.cipher = new Cipher('the-key', { format: format, work: 1 })
     }})
 
     describe('encryption', function() { with(this) {
@@ -51,7 +51,7 @@ jstest.describe('vault-cipher', function() { with(this) {
   }})
 
   it('decrypts a known ciphertext', function() { with(this) {
-    var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
+    var cipher = new Cipher('give us the room', { salt: 'whats next', work: 1 }),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
     var text = cipher.decrypt(ciphertext)
@@ -59,7 +59,7 @@ jstest.describe('vault-cipher', function() { with(this) {
   }})
 
   it('decrypts a known ciphertext as a buffer', function() { with(this) {
-    var cipher = new Cipher('give us the room', {salt: 'whats next', work: 1}),
+    var cipher = new Cipher('give us the room', { salt: 'whats next', work: 1 }),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
     var text = cipher.decrypt(new Buffer(ciphertext, 'base64'))

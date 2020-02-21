@@ -42,7 +42,7 @@ var die = function(message) {
 };
 
 var params = nopt(options, shorts),
-    cipher = new Cipher(params.key, {salt: params.salt, work: params.work, format: params.format}),
+    cipher = new Cipher(params.key, { salt: params.salt, work: params.work, format: params.format }),
     input  = params.input ? fs.createReadStream(params.input) : process.stdin,
     output = params.output ? fs.createWriteStream(params.output) : process.stdout;
 
