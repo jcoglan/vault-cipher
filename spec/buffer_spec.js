@@ -67,11 +67,6 @@ jstest.describe('Buffer', function() { with(this) {
       })
     }})
 
-    it('rejects invalid hex strings', function() { with(this) {
-      assertThrows(TypeError, function() { new Buffer('0', 'hex') })
-      assertThrows(TypeError, function() { new Buffer('z', 'hex') })
-    }})
-
     it('converts to utf8', function() { with(this) {
       assertConvert('utf8', {
         '00'             : '\0',
@@ -109,21 +104,21 @@ jstest.describe('Buffer', function() { with(this) {
 
     it('converts illegal encodings of valid codepoints to replacement characters', function() { with(this) {
       // 'a' = 01100001 -> 11000001 10100001 = c1 a1
-      assertEqual( '\ufffd\ufffd', new Buffer([0xc1, 0xa1]).toString('utf8') )
+      assertEqual( 0xfffd, new Buffer([0xc1, 0xa1]).toString('utf8').charCodeAt(0) )
       // 'a' = 01100001 -> 11100000 10000001 10100001 = e0 81 a1
-      assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xe0, 0x81, 0xa1]).toString('utf8') )
+      assertEqual( 0xfffd, new Buffer([0xe0, 0x81, 0xa1]).toString('utf8').charCodeAt(0) )
     }})
 
     if (VERSION && VERSION[0] < 1) return
 
     it('converts encodings of high surrogates to replacement characters', function() { with(this) {
       // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
-      assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xae, 0x99]).toString('utf8') )
+      assertEqual( 0xfffd, new Buffer([0xed, 0xae, 0x99]).toString('utf8').charCodeAt(0) )
     }})
 
     it('converts encodings of low surrogates to replacement characters', function() { with(this) {
       // df00 = 1101111100000000 -> 11101101 10111100 10000000 = ed bc 80
-      assertEqual( '\ufffd\ufffd\ufffd', new Buffer([0xed, 0xbc, 0x80]).toString('utf8') )
+      assertEqual( 0xfffd, new Buffer([0xed, 0xbc, 0x80]).toString('utf8').charCodeAt(0) )
     }})
   }})
 
