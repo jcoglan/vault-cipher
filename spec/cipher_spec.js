@@ -5,7 +5,7 @@ var jstest = require('jstest').Test,
 jstest.describe('vault-cipher', function() { with(this) {
   sharedExamplesFor('cipher algorithm', function() { with(this) {
     before(function() { with(this) {
-      this.cipher = new Cipher('the-key', { format: format, work: 1 })
+      this.cipher = new Cipher('the-key', { format, work: 1 })
     }})
 
     describe('encryption', function() { with(this) {

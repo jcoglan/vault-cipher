@@ -4,7 +4,7 @@
 // asmCrypto
 
 function asm_aes_256_gcm(key, iv, msg) {
-  var ct = asmCrypto.AES_GCM.encrypt(
+  let ct = asmCrypto.AES_GCM.encrypt(
           msg.toString('binary'),
           key.toString('binary'),
           iv.toString('binary'));
@@ -15,7 +15,7 @@ function asm_aes_256_gcm(key, iv, msg) {
 function asm_decrypt_aes_256_gcm(key, iv, ct) {
   ct = Buffer.from(ct, 'base64');
 
-  var pt = asmCrypto.AES_GCM.decrypt(
+  let pt = asmCrypto.AES_GCM.decrypt(
           ct.toString('binary'),
           key.toString('binary'),
           iv.toString('binary'));
@@ -27,7 +27,7 @@ function asm_decrypt_aes_256_gcm(key, iv, ct) {
 // Forge
 
 function forge_aes_256_gcm(key, iv, msg) {
-  var password = forge.util.createBuffer(key.toString('binary')),
+  let password = forge.util.createBuffer(key.toString('binary')),
       ivBits   = forge.util.createBuffer(iv.toString('binary')),
       message  = forge.util.createBuffer(msg.toString('binary')),
       cipher   = forge.cipher.createCipher('AES-GCM', password);
@@ -42,10 +42,10 @@ function forge_aes_256_gcm(key, iv, msg) {
 function forge_decrypt_aes_256_gcm(key, iv, msg) {
   msg = Buffer.from(msg, 'base64');
 
-  var ct  = msg.slice(0, msg.length - 16),
+  let ct  = msg.slice(0, msg.length - 16),
       tag = msg.slice(msg.length - 16, msg.length);
 
-  var password = forge.util.createBuffer(key.toString('binary')),
+  let password = forge.util.createBuffer(key.toString('binary')),
       ivBits   = forge.util.createBuffer(iv.toString('binary')),
       message  = forge.util.createBuffer(ct.toString('binary')),
       cipher   = forge.cipher.createDecipher('AES-GCM', password);
@@ -64,7 +64,7 @@ function forge_decrypt_aes_256_gcm(key, iv, msg) {
 // Node.js
 
 function node_aes_256_gcm(key, iv, msg) {
-  var cipher = crypto.createCipheriv('aes-256-gcm', key, iv),
+  let cipher = crypto.createCipheriv('aes-256-gcm', key, iv),
       ct = Buffer.concat([ cipher.update(msg), cipher.final(), cipher.getAuthTag() ]);
 
   return ct.toString('base64');
@@ -73,12 +73,12 @@ function node_aes_256_gcm(key, iv, msg) {
 function node_decrypt_aes_256_gcm(key, iv, msg) {
   msg = Buffer.from(msg, 'base64');
 
-  var ct       = msg.slice(0, msg.length - 16),
+  let ct       = msg.slice(0, msg.length - 16),
       authTag  = msg.slice(msg.length - 16, msg.length),
       decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
 
   decipher.setAuthTag(authTag);
-  var pt = Buffer.concat([ decipher.update(ct), decipher.final() ]);
+  let pt = Buffer.concat([ decipher.update(ct), decipher.final() ]);
 
   return pt.toString();
 }
@@ -86,10 +86,10 @@ function node_decrypt_aes_256_gcm(key, iv, msg) {
 
 // SJCL
 
-var base64 = sjcl.codec.base64;
+const base64 = sjcl.codec.base64;
 
 function sjcl_aes_256_gcm(key, iv, msg) {
-  var password = base64.toBits(key.toString('base64')),
+  let password = base64.toBits(key.toString('base64')),
       ivBits   = base64.toBits(iv.toString('base64')),
       message  = base64.toBits(msg.toString('base64')),
       aes      = new sjcl.cipher.aes(password),
@@ -99,7 +99,7 @@ function sjcl_aes_256_gcm(key, iv, msg) {
 }
 
 function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
-  var password = base64.toBits(key.toString('base64')),
+  let password = base64.toBits(key.toString('base64')),
       ivBits   = base64.toBits(iv.toString('base64')),
       ctBits   = base64.toBits(ct),
       aes      = new sjcl.cipher.aes(password),
@@ -109,10 +109,10 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
 }
 
 
-var isNode = (typeof module === 'object'),
-    key    = crypto.randomBytes(32),
-    iv     = crypto.randomBytes(12),
-    msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+const isNode = (typeof module === 'object'),
+      key    = crypto.randomBytes(32),
+      iv     = crypto.randomBytes(12),
+      msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
 
 console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
 console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
