@@ -79,29 +79,16 @@ console.log('[sjcl ]', sjcl_pbkdf2_hmac_sha1(pw, salt, work, len));
 
 let suite = new Benchmark.Suite();
 
-suite.add('asmCrypto PBKDF2', function() {
-  asm_pbkdf2_hmac_sha1(pw, salt, work, len);
-});
-
-suite.add('CryptoJS PBKDF2', function() {
-  cjs_pbkdf2_hmac_sha1(pw, salt, work, len);
-});
-
-suite.add('Forge PBKDF2', function() {
-  forge_pbkdf2_hmac_sha1(pw, salt, work, len);
-});
-
-suite.add('SJCL PBKDF2', function() {
-  sjcl_pbkdf2_hmac_sha1(pw, salt, work, len);
-});
+suite.add('asmCrypto PBKDF2', () => asm_pbkdf2_hmac_sha1(pw, salt, work, len));
+suite.add('CryptoJS PBKDF2', () => cjs_pbkdf2_hmac_sha1(pw, salt, work, len));
+suite.add('Forge PBKDF2', () => forge_pbkdf2_hmac_sha1(pw, salt, work, len));
+suite.add('SJCL PBKDF2', () => sjcl_pbkdf2_hmac_sha1(pw, salt, work, len));
 
 if (isNode)
-  suite.add('Node PBKDF2', function() {
-    node_pbkdf2_hmac_sha1(pw, salt, work, len);
-  });
+  suite.add('Node PBKDF2', () => node_pbkdf2_hmac_sha1(pw, salt, work, len));
 
 suite.on('complete', function() {
-  this.forEach(function(result) { console.log(result.toString()) });
+  this.forEach((result) => console.log(result.toString()));
 });
 
 suite.run();
