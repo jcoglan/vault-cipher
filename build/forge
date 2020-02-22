@@ -1,8 +1,0 @@
-#!/bin/bash
-
-cd node_modules/node-forge
-npm install
-npm run minify
-cd -
-mkdir -p compat/vendor
-cp node_modules/node-forge/js/forge.min.js compat/vendor/
