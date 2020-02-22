@@ -10,11 +10,11 @@ function asm_aes_256_cbc(key, iv, msg) {
           undefined,
           iv.toString('binary'));
 
-  return new Buffer(ct).toString('base64');
+  return Buffer.from(ct).toString('base64');
 }
 
 function asm_decrypt_aes_256_cbc(key, iv, ct) {
-  ct = new Buffer(ct, 'base64');
+  ct = Buffer.from(ct, 'base64');
 
   var pt = asmCrypto.AES_CBC.decrypt(
           ct.toString('binary'),
@@ -22,7 +22,7 @@ function asm_decrypt_aes_256_cbc(key, iv, ct) {
           undefined,
           iv.toString('binary'));
 
-  return new Buffer(pt).toString();
+  return Buffer.from(pt).toString();
 }
 
 
@@ -49,7 +49,7 @@ function cjs_decrypt_aes_256_cbc(key, iv, ct) {
             mode: CryptoJS.mode.CBC
           });
 
-  return new Buffer(msg.toString(), 'hex').toString();
+  return Buffer.from(msg.toString(), 'hex').toString();
 }
 
 
@@ -69,7 +69,7 @@ function forge_aes_256_cbc(key, iv, msg) {
 }
 
 function forge_decrypt_aes_256_cbc(key, iv, ct) {
-  ct = new Buffer(ct, 'base64');
+  ct = Buffer.from(ct, 'base64');
 
   var password = forge.util.createBuffer(key.toString('binary')),
       ivBits   = forge.util.createBuffer(iv.toString('binary')),
@@ -94,7 +94,7 @@ function node_aes_256_cbc(key, iv, msg) {
 }
 
 function node_decrypt_aes_256_cbc(key, iv, ct) {
-  ct = new Buffer(ct, 'base64');
+  ct = Buffer.from(ct, 'base64');
 
   var decipher = crypto.createDecipheriv('aes-256-cbc', key, iv),
       pt = Buffer.concat([ decipher.update(ct), decipher.final() ]);
@@ -106,7 +106,7 @@ function node_decrypt_aes_256_cbc(key, iv, ct) {
 var isNode = (typeof module === 'object'),
     key    = crypto.randomBytes(32),
     iv     = crypto.randomBytes(16),
-    msg    = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+    msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
 
 console.log('[asm  ]', asm_aes_256_cbc(key, iv, msg));
 console.log('[cjs  ]', cjs_aes_256_cbc(key, iv, msg));

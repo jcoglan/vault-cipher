@@ -6,8 +6,8 @@ var jstest  = require('jstest').Test,
 
 jstest.describe('crypto', function() { with(this) {
   before(function() { with(this) {
-    this.key = new Buffer('5AbFdjdUpIhx5hVeFrEpWYLucIogiXH9bOvFiOHLrBI=', 'base64')
-    this.iv  = new Buffer('JQLZwyFW8v1lz7Cm/ino5w==', 'base64')
+    this.key = Buffer.from('5AbFdjdUpIhx5hVeFrEpWYLucIogiXH9bOvFiOHLrBI=', 'base64')
+    this.iv  = Buffer.from('JQLZwyFW8v1lz7Cm/ino5w==', 'base64')
 
     this.message = 'The quick brown fox jumps over the lazy dog'
   }})

@@ -10,7 +10,7 @@ function asm_pbkdf2_hmac_sha1(pw, salt, work, len) {
           work,
           len);
 
-  return new Buffer(pbkdf2).toString('base64');
+  return Buffer.from(pbkdf2).toString('base64');
 }
 
 

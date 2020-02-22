@@ -62,7 +62,7 @@ jstest.describe('vault-cipher', function() { with(this) {
     var cipher = new Cipher('give us the room', { salt: 'whats next', work: 1 }),
         ciphertext = 'uSiYZkAyNQgO7rDYTeYG6f20lhCscaQCxWzTqwqJUQekBDNzYfEbbXa4T6suNQK/5MuX0GZ3TIXdksu4OFhycg=='
 
-    var text = cipher.decrypt(new Buffer(ciphertext, 'base64'))
+    var text = cipher.decrypt(Buffer.from(ciphertext, 'base64'))
     assertEqual( 'answer me this', text )
   }})
 }})

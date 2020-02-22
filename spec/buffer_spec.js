@@ -20,10 +20,10 @@ jstest.describe('Buffer', function() { with(this) {
       for (var key in examples) {
         bytes = (key.match(/[0-9a-f]{2}/ig) || []).map(function(s) { return parseInt(s, 16) })
 
-        buffer = new Buffer(bytes)
+        buffer = Buffer.from(bytes)
         this.assertEqual(examples[key], buffer.toString(encoding))
 
-        buffer = new Buffer(examples[key], encoding)
+        buffer = Buffer.from(examples[key], encoding)
         this.assertEqual(bytes, this.getBytes(buffer))
       }
     })
@@ -46,8 +46,8 @@ jstest.describe('Buffer', function() { with(this) {
     }})
 
     it('accepts malformed base64', function() { with(this) {
-      assertEqual( [0x92], getBytes(new Buffer('kk==', 'base64')) )
-      assertEqual( 'kg==', new Buffer([0x92]).toString('base64') )
+      assertEqual( [0x92], getBytes(Buffer.from('kk==', 'base64')) )
+      assertEqual( 'kg==', Buffer.from([0x92]).toString('base64') )
     }})
 
     it('converts to hex', function() { with(this) {
@@ -95,36 +95,36 @@ jstest.describe('Buffer', function() { with(this) {
     }})
 
     it('converts unpaired high surrogates to the replacement character', function() { with(this) {
-      assertEqual( [0xef, 0xbf, 0xbd, 0x61], getBytes(new Buffer('\udb99a', 'utf8')) )
+      assertEqual( [0xef, 0xbf, 0xbd, 0x61], getBytes(Buffer.from('\udb99a', 'utf8')) )
     }})
 
     it('converts unpaired low surrogates to the replacement character', function() { with(this) {
-      assertEqual( [0xef, 0xbf, 0xbd, 0x61], getBytes(new Buffer('\udf00a', 'utf8')) )
+      assertEqual( [0xef, 0xbf, 0xbd, 0x61], getBytes(Buffer.from('\udf00a', 'utf8')) )
     }})
 
     it('converts illegal encodings of valid codepoints to replacement characters', function() { with(this) {
       // 'a' = 01100001 -> 11000001 10100001 = c1 a1
-      assertEqual( 0xfffd, new Buffer([0xc1, 0xa1]).toString('utf8').charCodeAt(0) )
+      assertEqual( 0xfffd, Buffer.from([0xc1, 0xa1]).toString('utf8').charCodeAt(0) )
       // 'a' = 01100001 -> 11100000 10000001 10100001 = e0 81 a1
-      assertEqual( 0xfffd, new Buffer([0xe0, 0x81, 0xa1]).toString('utf8').charCodeAt(0) )
+      assertEqual( 0xfffd, Buffer.from([0xe0, 0x81, 0xa1]).toString('utf8').charCodeAt(0) )
     }})
 
     if (VERSION && VERSION[0] < 1) return
 
     it('converts encodings of high surrogates to replacement characters', function() { with(this) {
       // db99 = 1101101110011001 -> 11101101 10101110 10011001 = ed ae 99
-      assertEqual( 0xfffd, new Buffer([0xed, 0xae, 0x99]).toString('utf8').charCodeAt(0) )
+      assertEqual( 0xfffd, Buffer.from([0xed, 0xae, 0x99]).toString('utf8').charCodeAt(0) )
     }})
 
     it('converts encodings of low surrogates to replacement characters', function() { with(this) {
       // df00 = 1101111100000000 -> 11101101 10111100 10000000 = ed bc 80
-      assertEqual( 0xfffd, new Buffer([0xed, 0xbc, 0x80]).toString('utf8').charCodeAt(0) )
+      assertEqual( 0xfffd, Buffer.from([0xed, 0xbc, 0x80]).toString('utf8').charCodeAt(0) )
     }})
   }})
 
   describe('{read,write}{U,}Int{8,16,32}{BE,LE}', function() { with(this) {
     before(function() { with(this) {
-      this.buffer = new Buffer('5e885b27bcf209bf', 'hex')
+      this.buffer = Buffer.from('5e885b27bcf209bf', 'hex')
     }})
 
     if (!VERSION || VERSION[0] > 0 || VERSION[1] >= 12) {
@@ -224,9 +224,9 @@ jstest.describe('Buffer', function() { with(this) {
   describe('concat()', function() { with(this) {
     before(function() { with(this) {
       this.bufs = [
-        new Buffer('01', 'hex'),
-        new Buffer('0203', 'hex'),
-        new Buffer('04050607', 'hex')
+        Buffer.from('01', 'hex'),
+        Buffer.from('0203', 'hex'),
+        Buffer.from('04050607', 'hex')
       ]
     }})
 
@@ -252,8 +252,8 @@ jstest.describe('Buffer', function() { with(this) {
 
   describe('copy()', function() { with(this) {
     before(function() { with(this) {
-      this.source = new Buffer('0102030405', 'hex')
-      this.target = new Buffer('0000000000000000', 'hex')
+      this.source = Buffer.from('0102030405', 'hex')
+      this.target = Buffer.from('0000000000000000', 'hex')
     }})
 
     it('copies the whole source to the beginning of the target', function() { with(this) {
@@ -301,7 +301,7 @@ jstest.describe('Buffer', function() { with(this) {
 
   describe('slice()', function() { with(this) {
     before(function() { with(this) {
-      this.source = new Buffer('0102030405', 'hex')
+      this.source = Buffer.from('0102030405', 'hex')
     }})
 
     it('returns the whole of the source', function() { with(this) {

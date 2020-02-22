@@ -8,7 +8,7 @@ function asm_hmac_sha256(key, msg) {
           msg.toString('binary'),
           key.toString('binary'));
 
-  return new Buffer(hmac).toString('base64');
+  return Buffer.from(hmac).toString('base64');
 }
 
 
@@ -62,7 +62,7 @@ function sjcl_hmac_sha256(key, msg) {
 
 var isNode = (typeof module === 'object'),
     key    = crypto.randomBytes(32),
-    msg    = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+    msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
 
 console.log('[asm  ]', asm_hmac_sha256(key, msg));
 console.log('[cjs  ]', cjs_hmac_sha256(key, msg));

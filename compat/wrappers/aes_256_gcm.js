@@ -9,18 +9,18 @@ function asm_aes_256_gcm(key, iv, msg) {
           key.toString('binary'),
           iv.toString('binary'));
 
-  return new Buffer(ct).toString('base64');
+  return Buffer.from(ct).toString('base64');
 }
 
 function asm_decrypt_aes_256_gcm(key, iv, ct) {
-  ct = new Buffer(ct, 'base64');
+  ct = Buffer.from(ct, 'base64');
 
   var pt = asmCrypto.AES_GCM.decrypt(
           ct.toString('binary'),
           key.toString('binary'),
           iv.toString('binary'));
 
-  return new Buffer(pt).toString();
+  return Buffer.from(pt).toString();
 }
 
 
@@ -40,7 +40,7 @@ function forge_aes_256_gcm(key, iv, msg) {
 }
 
 function forge_decrypt_aes_256_gcm(key, iv, msg) {
-  msg = new Buffer(msg, 'base64');
+  msg = Buffer.from(msg, 'base64');
 
   var ct  = msg.slice(0, msg.length - 16),
       tag = msg.slice(msg.length - 16, msg.length);
@@ -71,7 +71,7 @@ function node_aes_256_gcm(key, iv, msg) {
 }
 
 function node_decrypt_aes_256_gcm(key, iv, msg) {
-  msg = new Buffer(msg, 'base64');
+  msg = Buffer.from(msg, 'base64');
 
   var ct       = msg.slice(0, msg.length - 16),
       authTag  = msg.slice(msg.length - 16, msg.length),
@@ -112,7 +112,7 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
 var isNode = (typeof module === 'object'),
     key    = crypto.randomBytes(32),
     iv     = crypto.randomBytes(12),
-    msg    = new Buffer('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+    msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
 
 console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
 console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
