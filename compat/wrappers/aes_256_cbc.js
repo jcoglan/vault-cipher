@@ -5,10 +5,10 @@
 
 function asm_aes_256_cbc(key, iv, msg) {
   let ct = asmCrypto.AES_CBC.encrypt(
-          msg.toString('binary'),
-          key.toString('binary'),
+          Uint8Array.from(msg),
+          Uint8Array.from(key),
           undefined,
-          iv.toString('binary'));
+          Uint8Array.from(iv));
 
   return Buffer.from(ct).toString('base64');
 }
@@ -17,10 +17,10 @@ function asm_decrypt_aes_256_cbc(key, iv, ct) {
   ct = Buffer.from(ct, 'base64');
 
   let pt = asmCrypto.AES_CBC.decrypt(
-          ct.toString('binary'),
-          key.toString('binary'),
+          Uint8Array.from(ct),
+          Uint8Array.from(key),
           undefined,
-          iv.toString('binary'));
+          Uint8Array.from(iv));
 
   return Buffer.from(pt).toString();
 }

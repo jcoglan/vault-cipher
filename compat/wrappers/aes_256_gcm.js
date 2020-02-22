@@ -5,9 +5,9 @@
 
 function asm_aes_256_gcm(key, iv, msg) {
   let ct = asmCrypto.AES_GCM.encrypt(
-          msg.toString('binary'),
-          key.toString('binary'),
-          iv.toString('binary'));
+          Uint8Array.from(msg),
+          Uint8Array.from(key),
+          Uint8Array.from(iv));
 
   return Buffer.from(ct).toString('base64');
 }
@@ -16,9 +16,9 @@ function asm_decrypt_aes_256_gcm(key, iv, ct) {
   ct = Buffer.from(ct, 'base64');
 
   let pt = asmCrypto.AES_GCM.decrypt(
-          ct.toString('binary'),
-          key.toString('binary'),
-          iv.toString('binary'));
+          Uint8Array.from(ct),
+          Uint8Array.from(key),
+          Uint8Array.from(iv));
 
   return Buffer.from(pt).toString();
 }
