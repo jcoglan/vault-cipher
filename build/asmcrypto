@@ -1,7 +1,6 @@
 #!/bin/bash
 
-mkdir -p compat/vendor
-cp node_modules/asmcrypto.js/asmcrypto.js{,.map} compat/vendor/
-cp compat/vendor/asmcrypto.js* lib/crypto/
+cp node_modules/asmcrypto.js/asmcrypto.all{,.es5}.js compat/vendor/
+cp compat/vendor/asmcrypto.all.js lib/crypto/
 
-chmod -x {compat/vendor,lib/crypto}/asmcrypto*
+chmod -x {compat/vendor,lib/crypto}/asmcrypto.*.js

@@ -4,9 +4,10 @@
 // asmCrypto
 
 function asm_hmac_sha1(key, msg) {
-  let hmac = asmCrypto.HMAC_SHA1.bytes(
-          msg.toString('binary'),
-          key.toString('binary'));
+  let hmac = new asmCrypto.HmacSha1(Uint8Array.from(key))
+          .process(Uint8Array.from(msg))
+          .finish()
+          .result;
 
   return Buffer.from(hmac).toString('base64');
 }

@@ -4,9 +4,9 @@
 // asmCrypto
 
 function asm_pbkdf2_hmac_sha256(pw, salt, work, len) {
-  let pbkdf2 = asmCrypto.PBKDF2_HMAC_SHA256.bytes(
-          pw.toString('binary'),
-          salt.toString('binary'),
+  let pbkdf2 = asmCrypto.Pbkdf2HmacSha256(
+          Uint8Array.from(pw),
+          Uint8Array.from(salt),
           work,
           len);
 

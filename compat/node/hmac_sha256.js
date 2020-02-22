@@ -1,4 +1,4 @@
-global.asmCrypto = require('../vendor/asmcrypto');
+global.asmCrypto = require('../vendor/asmcrypto.all');
 global.Benchmark = require('benchmark');
 global.crypto    = require('crypto');
 global.CryptoJS  = require('crypto-js');

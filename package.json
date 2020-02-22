@@ -10,7 +10,7 @@
 , "main"            : "./lib/index"
 , "bin"             : { "vault-cipher": "./bin/vault-cipher" }
 
-, "dependencies"    : { "asmcrypto.js": "~0"
+, "dependencies"    : { "asmcrypto.js": "~2.3.0"
                       , "nopt": ">= 3.0.0"
                       }
 

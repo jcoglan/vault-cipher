@@ -14,6 +14,9 @@ module.exports = {
   },
 
   module: {
-    noParse: /jstest/
+    noParse: [
+      /asmcrypto/,
+      /jstest/,
+    ]
   }
 };
