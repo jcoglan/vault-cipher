@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-  devtool:  'sourcemap',
+  devtool: 'sourcemap',
 
   entry: {
     'compat/bundles/buffer': path.join(__dirname, 'compat', 'vendor', 'buffer'),
@@ -9,6 +9,7 @@ module.exports = {
   },
 
   output: {
+    path: __dirname,
     filename: '[name].js'
   },
 
