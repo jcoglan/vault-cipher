@@ -7,7 +7,8 @@ function asm_aes_256_gcm(key, iv, msg) {
   let ct = asmCrypto.AES_GCM.encrypt(
           msg.toString('binary'),
           key.toString('binary'),
-          iv.toString('binary'));
+          iv.toString('binary'),
+          null, 16);
 
   return Buffer.from(ct).toString('base64');
 }
@@ -18,7 +19,8 @@ function asm_decrypt_aes_256_gcm(key, iv, ct) {
   let pt = asmCrypto.AES_GCM.decrypt(
           ct.toString('binary'),
           key.toString('binary'),
-          iv.toString('binary'));
+          iv.toString('binary'),
+          null, 16);
 
   return Buffer.from(pt).toString();
 }
@@ -32,7 +34,7 @@ function forge_aes_256_gcm(key, iv, msg) {
       message  = forge.util.createBuffer(msg.toString('binary')),
       cipher   = forge.cipher.createCipher('AES-GCM', password);
 
-  cipher.start({iv: ivBits});
+  cipher.start({ iv: ivBits, tagLength: 128 });
   cipher.update(message);
   cipher.finish();
 
@@ -64,8 +66,9 @@ function forge_decrypt_aes_256_gcm(key, iv, msg) {
 // Node.js
 
 function node_aes_256_gcm(key, iv, msg) {
-  let cipher = crypto.createCipheriv('aes-256-gcm', key, iv),
-      ct = Buffer.concat([ cipher.update(msg), cipher.final(), cipher.getAuthTag() ]);
+  let opts   = { authTagLength: 16 },
+      cipher = crypto.createCipheriv('aes-256-gcm', key, iv, opts),
+      ct     = Buffer.concat([ cipher.update(msg), cipher.final(), cipher.getAuthTag() ]);
 
   return ct.toString('base64');
 }
@@ -75,7 +78,8 @@ function node_decrypt_aes_256_gcm(key, iv, msg) {
 
   let ct       = msg.slice(0, msg.length - 16),
       authTag  = msg.slice(msg.length - 16, msg.length),
-      decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+      opts     = { authTagLength: 16 },
+      decipher = crypto.createDecipheriv('aes-256-gcm', key, iv, opts);
 
   decipher.setAuthTag(authTag);
   let pt = Buffer.concat([ decipher.update(ct), decipher.final() ]);
@@ -93,7 +97,7 @@ function sjcl_aes_256_gcm(key, iv, msg) {
       ivBits   = base64.toBits(iv.toString('base64')),
       message  = base64.toBits(msg.toString('base64')),
       aes      = new sjcl.cipher.aes(password),
-      ct       = sjcl.mode.gcm.encrypt(aes, message, ivBits);
+      ct       = sjcl.mode.gcm.encrypt(aes, message, ivBits, null, 128);
 
   return base64.fromBits(ct);
 }
@@ -103,7 +107,7 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
       ivBits   = base64.toBits(iv.toString('base64')),
       ctBits   = base64.toBits(ct),
       aes      = new sjcl.cipher.aes(password),
-      pt       = sjcl.mode.gcm.decrypt(aes, ctBits, ivBits);
+      pt       = sjcl.mode.gcm.decrypt(aes, ctBits, ivBits, null, 128);
 
   return sjcl.codec.utf8String.fromBits(pt);
 }

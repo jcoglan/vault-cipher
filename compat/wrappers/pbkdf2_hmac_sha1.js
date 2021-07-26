@@ -46,7 +46,7 @@ function forge_pbkdf2_hmac_sha1(pw, salt, work, len) {
 // Node.js
 
 function node_pbkdf2_hmac_sha1(pw, salt, work, len) {
-  return crypto.pbkdf2Sync(pw, salt, work, len).toString('base64');
+  return crypto.pbkdf2Sync(pw, salt, work, len, 'sha1').toString('base64');
 }
 
 
