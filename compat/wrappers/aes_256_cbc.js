@@ -61,7 +61,7 @@ function forge_aes_256_cbc(key, iv, msg) {
       message  = forge.util.createBuffer(msg.toString('binary')),
       cipher   = forge.cipher.createCipher('AES-CBC', password);
 
-  cipher.start({iv: ivBits});
+  cipher.start({ iv: ivBits });
   cipher.update(message);
   cipher.finish();
 
@@ -76,7 +76,7 @@ function forge_decrypt_aes_256_cbc(key, iv, ct) {
       message  = forge.util.createBuffer(ct.toString('binary')),
       cipher   = forge.cipher.createDecipher('AES-CBC', password);
 
-  cipher.start({iv: ivBits});
+  cipher.start({ iv: ivBits });
   cipher.update(message);
   cipher.finish();
 

@@ -1,5 +1,5 @@
-global.asmCrypto = require('../vendor/asmcrypto'),
-global.crypto    = require('crypto'),
+global.asmCrypto = require('../vendor/asmcrypto');
+global.crypto    = require('crypto');
 global.forge     = require('node-forge');
 global.sjcl      = require('sjcl');
 
