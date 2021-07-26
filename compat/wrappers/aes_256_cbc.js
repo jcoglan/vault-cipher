@@ -103,6 +103,32 @@ function node_decrypt_aes_256_cbc(key, iv, ct) {
 }
 
 
+// WebCrypto
+
+async function web_aes_256_cbc(key, iv, msg) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+
+  let ct = await subtle.encrypt(
+    { name: 'AES-CBC', iv },
+    await subtle.importKey('raw', key, { name: 'AES-CBC' }, false, ['encrypt']),
+    msg);
+
+  return Buffer.from(ct).toString('base64');
+}
+
+async function web_decrypt_aes_256_cbc(key, iv, ct) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+  ct = Buffer.from(ct, 'base64');
+
+  let pt = await subtle.decrypt(
+    { name: 'AES-CBC', iv },
+    await subtle.importKey('raw', key, { name: 'AES-CBC' }, false, ['decrypt']),
+    ct);
+
+  return Buffer.from(pt).toString();
+}
+
+
 async function main() {
   const isNode  = (typeof module === 'object'),
         version = isNode && process.version.match(/[0-9]+/g).map(n => parseInt(n, 10)),
@@ -113,12 +139,18 @@ async function main() {
   console.log('[asm  ]', asm_aes_256_cbc(key, iv, msg));
   console.log('[cjs  ]', cjs_aes_256_cbc(key, iv, msg));
   console.log('[forge]', forge_aes_256_cbc(key, iv, msg));
-  if (isNode) console.log('[node ]', node_aes_256_cbc(key, iv, msg));
+  if (isNode) {
+    console.log('[node ]', node_aes_256_cbc(key, iv, msg));
+    if (version[0] >= 16) console.log('[web  ]', await web_aes_256_cbc(key, iv, msg));
+  }
 
   console.log('[asm  ]', asm_decrypt_aes_256_cbc(key, iv, asm_aes_256_cbc(key, iv, msg)));
   console.log('[cjs  ]', cjs_decrypt_aes_256_cbc(key, iv, cjs_aes_256_cbc(key, iv, msg)));
   console.log('[forge]', forge_decrypt_aes_256_cbc(key, iv, forge_aes_256_cbc(key, iv, msg)));
-  if (isNode) console.log('[node ]', node_decrypt_aes_256_cbc(key, iv, node_aes_256_cbc(key, iv, msg)));
+  if (isNode) {
+    console.log('[node ]', node_decrypt_aes_256_cbc(key, iv, node_aes_256_cbc(key, iv, msg)));
+    if (version[0] >= 16) console.log('[web  ]', await web_decrypt_aes_256_cbc(key, iv, await web_aes_256_cbc(key, iv, msg)));
+  }
 }
 
 main();

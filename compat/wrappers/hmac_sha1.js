@@ -45,6 +45,20 @@ function node_hmac_sha1(key, msg) {
 }
 
 
+// WebCrypto
+
+async function web_hmac_sha1(key, msg) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+
+  let hash = await subtle.sign(
+    { name: 'HMAC' },
+    await subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']),
+    msg);
+
+  return Buffer.from(hash).toString('base64');
+}
+
+
 async function main() {
   const isNode  = (typeof module === 'object'),
         version = isNode && process.version.match(/[0-9]+/g).map(n => parseInt(n, 10)),
@@ -54,7 +68,10 @@ async function main() {
   console.log('[asm  ]', asm_hmac_sha1(key, msg));
   console.log('[cjs  ]', cjs_hmac_sha1(key, msg));
   console.log('[forge]', forge_hmac_sha1(key, msg));
-  if (isNode) console.log('[node ]', node_hmac_sha1(key, msg));
+  if (isNode) {
+    console.log('[node ]', node_hmac_sha1(key, msg));
+    if (version[0] >= 16) console.log('[web  ]', await web_hmac_sha1(key, msg));
+  }
 
   let suite = new Benchmark.Suite();
 
@@ -62,8 +79,18 @@ async function main() {
   suite.add('CryptoJS HMAC', () => cjs_hmac_sha1(key, msg));
   suite.add('Forge HMAC', () => forge_hmac_sha1(key, msg));
 
-  if (isNode)
+  if (isNode) {
     suite.add('Node HMAC', () => node_hmac_sha1(key, msg));
+
+    if (version[0] >= 16)
+      suite.add('WebCrypto HMAC', {
+        defer: true,
+        async fn(deferred) {
+          await web_hmac_sha1(key, msg);
+          deferred.resolve();
+        }
+      });
+  }
 
   suite.on('complete', function() {
     this.forEach((result) => console.log(result.toString()));

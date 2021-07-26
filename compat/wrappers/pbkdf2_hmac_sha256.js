@@ -67,6 +67,23 @@ function sjcl_pbkdf2_hmac_sha256(pw, salt, work, len) {
 }
 
 
+// WebCrypto
+
+async function web_pbkdf2_hmac_sha256(pw, salt, work, len) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+
+  let key = await subtle.deriveKey(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: work },
+    await subtle.importKey('raw', pw, 'PBKDF2', false, ['deriveKey']),
+    { name: 'AES-CBC', length: 8 * len },
+    true,
+    ['encrypt']);
+
+  let extracted = await subtle.exportKey('raw', key);
+  return Buffer.from(extracted).toString('base64');
+}
+
+
 async function main() {
   const isNode  = (typeof module === 'object'),
         version = isNode && process.version.match(/[0-9]+/g).map(n => parseInt(n, 10)),
@@ -79,7 +96,10 @@ async function main() {
   console.log('[cjs  ]', cjs_pbkdf2_hmac_sha256(pw, salt, work, len));
   console.log('[forge]', forge_pbkdf2_hmac_sha256(pw, salt, work, len));
   console.log('[sjcl ]', sjcl_pbkdf2_hmac_sha256(pw, salt, work, len));
-  if (isNode) console.log('[node ]', node_pbkdf2_hmac_sha256(pw, salt, work, len));
+  if (isNode) {
+    console.log('[node ]', node_pbkdf2_hmac_sha256(pw, salt, work, len));
+    if (version[0] >= 16) console.log('[web  ]', await web_pbkdf2_hmac_sha256(pw, salt, work, len));
+  }
 
   let suite = new Benchmark.Suite();
 
@@ -88,8 +108,18 @@ async function main() {
   suite.add('Forge PBKDF2', () => forge_pbkdf2_hmac_sha256(pw, salt, work, len));
   suite.add('SJCL PBKDF2', () => sjcl_pbkdf2_hmac_sha256(pw, salt, work, len));
 
-  if (isNode)
+  if (isNode) {
     suite.add('Node PBKDF2', () => node_pbkdf2_hmac_sha256(pw, salt, work, len));
+
+    if (version[0] >= 16)
+      suite.add('WebCrypto PBKDF2', {
+        defer: true,
+        async fn(deferred) {
+          await web_pbkdf2_hmac_sha256(pw, salt, work, len);
+          deferred.resolve();
+        }
+      });
+  }
 
   suite.on('complete', function() {
     this.forEach((result) => console.log(result.toString()));

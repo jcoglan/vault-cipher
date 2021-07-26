@@ -113,6 +113,32 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
 }
 
 
+// WebCrypto
+
+async function web_aes_256_gcm(key, iv, msg) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+
+  let ct = await subtle.encrypt(
+    { name: 'AES-GCM', iv, tagLength: 128 },
+    await subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt']),
+    msg);
+
+  return Buffer.from(ct).toString('base64');
+}
+
+async function web_decrypt_aes_256_gcm(key, iv, ct) {
+  let subtle = (crypto.webcrypto || crypto).subtle;
+  ct = Buffer.from(ct, 'base64');
+
+  let pt = await subtle.decrypt(
+    { name: 'AES-GCM', iv, tagLength: 128 },
+    await subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt']),
+    ct);
+
+  return Buffer.from(pt).toString();
+}
+
+
 async function main() {
   const isNode  = (typeof module === 'object'),
         version = isNode && process.version.match(/[0-9]+/g).map(n => parseInt(n, 10)),
@@ -123,12 +149,18 @@ async function main() {
   console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
   console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
   console.log('[sjcl ]', sjcl_aes_256_gcm(key, iv, msg));
-  if (isNode) console.log('[node ]', node_aes_256_gcm(key, iv, msg));
+  if (isNode) {
+    console.log('[node ]', node_aes_256_gcm(key, iv, msg));
+    if (version[0] >= 16) console.log('[web  ]', await web_aes_256_gcm(key, iv, msg));
+  }
 
   console.log('[asm  ]', asm_decrypt_aes_256_gcm(key, iv, asm_aes_256_gcm(key, iv, msg)));
   console.log('[forge]', forge_decrypt_aes_256_gcm(key, iv, forge_aes_256_gcm(key, iv, msg)));
   console.log('[sjcl ]', sjcl_decrypt_aes_256_gcm(key, iv, sjcl_aes_256_gcm(key, iv, msg)));
-  if (isNode) console.log('[node ]', node_decrypt_aes_256_gcm(key, iv, node_aes_256_gcm(key, iv, msg)));
+  if (isNode) {
+    console.log('[node ]', node_decrypt_aes_256_gcm(key, iv, node_aes_256_gcm(key, iv, msg)));
+    if (version[0] >= 16) console.log('[web  ]', await web_decrypt_aes_256_gcm(key, iv, await web_aes_256_gcm(key, iv, msg)));
+  }
 }
 
 main();
