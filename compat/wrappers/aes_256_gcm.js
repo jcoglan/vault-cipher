@@ -113,17 +113,22 @@ function sjcl_decrypt_aes_256_gcm(key, iv, ct) {
 }
 
 
-const isNode = (typeof module === 'object'),
-      key    = crypto.randomBytes(32),
-      iv     = crypto.randomBytes(12),
-      msg    = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
+async function main() {
+  const isNode  = (typeof module === 'object'),
+        version = isNode && process.version.match(/[0-9]+/g).map(n => parseInt(n, 10)),
+        key     = crypto.randomBytes(32),
+        iv      = crypto.randomBytes(12),
+        msg     = Buffer.from('I was there! When Captain Beefheart started up his first band \ud83d\ude31', 'utf8');
 
-console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
-console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
-if (isNode) console.log('[node ]', node_aes_256_gcm(key, iv, msg));
-console.log('[sjcl ]', sjcl_aes_256_gcm(key, iv, msg));
+  console.log('[asm  ]', asm_aes_256_gcm(key, iv, msg));
+  console.log('[forge]', forge_aes_256_gcm(key, iv, msg));
+  console.log('[sjcl ]', sjcl_aes_256_gcm(key, iv, msg));
+  if (isNode) console.log('[node ]', node_aes_256_gcm(key, iv, msg));
 
-console.log('[asm  ]', asm_decrypt_aes_256_gcm(key, iv, asm_aes_256_gcm(key, iv, msg)));
-console.log('[forge]', forge_decrypt_aes_256_gcm(key, iv, forge_aes_256_gcm(key, iv, msg)));
-if (isNode) console.log('[node ]', node_decrypt_aes_256_gcm(key, iv, node_aes_256_gcm(key, iv, msg)));
-console.log('[sjcl ]', sjcl_decrypt_aes_256_gcm(key, iv, sjcl_aes_256_gcm(key, iv, msg)));
+  console.log('[asm  ]', asm_decrypt_aes_256_gcm(key, iv, asm_aes_256_gcm(key, iv, msg)));
+  console.log('[forge]', forge_decrypt_aes_256_gcm(key, iv, forge_aes_256_gcm(key, iv, msg)));
+  console.log('[sjcl ]', sjcl_decrypt_aes_256_gcm(key, iv, sjcl_aes_256_gcm(key, iv, msg)));
+  if (isNode) console.log('[node ]', node_decrypt_aes_256_gcm(key, iv, node_aes_256_gcm(key, iv, msg)));
+}
+
+main();
